@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  service-b:
+    build:
+      context: ".."
+      dockerfile: "docker/images/go/Dockerfile"
+    container_name: service-b
+    networks:
+      - lib-net
+    env_file:
+      - ../../.env
+    links:
+      - redis
+    depends_on:
+      - "service-b-db-host"
+      - "redis"
+    restart: unless-stopped
+    working_dir: "/go/src/go-app/"
+    expose:
+      - 8083
+    command: bash -c "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
+    ports:
+      - "8083:8083"
+  service-b-db-host:
+    image: mysql:8.0
+    container_name: service-b-database
+    platform: linux/x86_64
+    networks:
+      - lib-net
+    environment:
+      MYSQL_DATABASE: LibraryPlatform
+      MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_TCP_PORT: 3309
+    ports:
+      - "3309:3306"
+networks:
+  lib-net:
+    external: true
