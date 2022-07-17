@@ -47,19 +47,19 @@ type logger struct {
 }
 
 func (l logger) Info(v ...interface{}) {
-	l.info.Println(v)
+	l.info.Println(v...)
 }
 
 func (l logger) Warn(v ...interface{}) {
-	l.warn.Println(v)
+	l.warn.Println(v...)
 }
 
 func (l logger) Error(v ...interface{}) {
-	l.err.Println(v)
+	l.err.Println(v...)
 }
 
 func (l logger) Debug(v ...interface{}) {
 	if l.debug != nil {
-		l.debug.Println(v)
+		l.debug.Println(v...)
 	}
 }

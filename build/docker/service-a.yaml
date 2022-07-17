@@ -5,13 +5,13 @@ services:
     build:
       context: ".."
       dockerfile: "docker/images/go/Dockerfile"
-    container_name: service-a
+    container_name: serviceA
     networks:
       - lib-net
     env_file:
       - ../../.env
     depends_on:
-      - "service-a-db-host"
+      - "serviceA-db-host"
     restart: unless-stopped
     working_dir: "/go/src/go-app/"
     expose:
@@ -21,7 +21,7 @@ services:
       - "8082:8082"
   service-a-db-host:
     image: mysql:8.0
-    container_name: service-a-database
+    container_name: serviceA-database
     platform: linux/x86_64
     networks:
       - lib-net

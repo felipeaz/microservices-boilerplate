@@ -5,7 +5,7 @@ services:
     build:
       context: ".."
       dockerfile: "docker/images/go/Dockerfile"
-    container_name: service-b
+    container_name: serviceB
     networks:
       - lib-net
     env_file:
@@ -13,7 +13,7 @@ services:
     links:
       - redis
     depends_on:
-      - "service-b-db-host"
+      - "serviceB-db-host"
       - "redis"
     restart: unless-stopped
     working_dir: "/go/src/go-app/"
@@ -24,7 +24,7 @@ services:
       - "8083:8083"
   service-b-db-host:
     image: mysql:8.0
-    container_name: service-b-database
+    container_name: serviceB-database
     platform: linux/x86_64
     networks:
       - lib-net
