@@ -7,8 +7,8 @@ import (
 )
 
 type Service interface {
-	Get() ([]domain.ItemA, error)
-	Find(id uuid.UUID) (domain.ItemA, error)
+	GetAll() ([]domain.ItemA, error)
+	GetOneByID(id uuid.UUID) (domain.ItemA, error)
 	Create(item domain.ItemA) (domain.ItemA, error)
 	Update(id uuid.UUID, item domain.ItemA) error
 	Delete(id uuid.UUID) error
@@ -24,12 +24,12 @@ type service struct {
 	log pkg.Logger
 }
 
-func (s service) Get() ([]domain.ItemA, error) {
+func (s service) GetAll() ([]domain.ItemA, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) Find(id uuid.UUID) (domain.ItemA, error) {
+func (s service) GetOneByID(id uuid.UUID) (domain.ItemA, error) {
 	//TODO implement me
 	panic("implement me")
 }

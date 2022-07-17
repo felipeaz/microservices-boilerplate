@@ -8,7 +8,7 @@ import (
 
 func TestLog(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ServiceB Handler Suits")
+	RunSpecs(t, "ServiceB Suits")
 }
 
 var _ = Describe("Testing ServiceB Handler", func() {

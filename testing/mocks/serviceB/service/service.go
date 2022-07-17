@@ -10,12 +10,12 @@ type Service struct {
 	mock.Mock
 }
 
-func (s *Service) Get() ([]domain.ItemB, error) {
+func (s *Service) GetAll() ([]domain.ItemB, error) {
 	called := s.Called()
 	return called.Get(0).([]domain.ItemB), called.Error(1)
 }
 
-func (s *Service) Find(id uuid.UUID) (domain.ItemB, error) {
+func (s *Service) GetOneByID(id uuid.UUID) (domain.ItemB, error) {
 	called := s.Called(id)
 	return called.Get(0).(domain.ItemB), called.Error(1)
 }
