@@ -2,15 +2,15 @@ package service
 
 import (
 	uuid "github.com/satori/go.uuid"
-	. "microservices-boilerplate/internal/serviceB/domain"
+	"microservices-boilerplate/internal/serviceB/domain"
 	"microservices-boilerplate/pkg"
 )
 
 type Service interface {
-	Get() ([]ItemB, error)
-	Find(id uuid.UUID) (ItemB, error)
-	Create(item ItemB) (ItemB, error)
-	Update(id uuid.UUID, item ItemB) error
+	Get() ([]domain.ItemB, error)
+	Find(id uuid.UUID) (domain.ItemB, error)
+	Create(item domain.ItemB) (domain.ItemB, error)
+	Update(id uuid.UUID, item domain.ItemB) error
 	Delete(id uuid.UUID) error
 }
 
@@ -24,22 +24,22 @@ type service struct {
 	log pkg.Logger
 }
 
-func (s service) Get() ([]ItemB, error) {
+func (s service) Get() ([]domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) Find(id uuid.UUID) (ItemB, error) {
+func (s service) Find(id uuid.UUID) (domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) Create(item ItemB) (ItemB, error) {
+func (s service) Create(item domain.ItemB) (domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) Update(id uuid.UUID, item ItemB) error {
+func (s service) Update(id uuid.UUID, item domain.ItemB) error {
 	//TODO implement me
 	panic("implement me")
 }
