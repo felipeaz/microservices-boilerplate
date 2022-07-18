@@ -5,9 +5,10 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+
 	"microservices-boilerplate/internal/serviceB/service"
-	assertion "microservices-boilerplate/test/assertion/serviceB"
-	mock "microservices-boilerplate/test/mocks/pkg"
+	assertion "microservices-boilerplate/internal/test/assertion/serviceB"
+	mock "microservices-boilerplate/internal/test/mocks/pkg"
 )
 
 func TestServiceB(t *testing.T) {

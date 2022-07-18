@@ -2,6 +2,7 @@ package service
 
 import (
 	uuid "github.com/satori/go.uuid"
+
 	"microservices-boilerplate/internal/serviceA/domain"
 	"microservices-boilerplate/pkg"
 )

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"microservices-boilerplate/internal/serviceB/service"
 )
 

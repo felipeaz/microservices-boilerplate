@@ -3,6 +3,7 @@ package service
 import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/mock"
+
 	"microservices-boilerplate/internal/serviceA/domain"
 )
 
