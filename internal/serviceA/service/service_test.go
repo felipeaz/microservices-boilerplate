@@ -1,35 +1,38 @@
-package service
+package service_test
 
 import (
+	"testing"
+
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"microservices-boilerplate/internal/serviceA/service"
 	assertion "microservices-boilerplate/test/assertion/serviceA"
 	mock "microservices-boilerplate/test/mocks/pkg"
-	"testing"
 )
 
-func TestLog(t *testing.T) {
+func TestServiceA(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ServiceA Suits")
+	RunSpecs(t, "Service B Suits")
 }
 
-var _ = Describe("Testing ServiceA Service", func() {
+var _ = Describe("Service A", func() {
 	logMock := new(mock.Logger)
-	service := New(logMock)
+	s := service.New(logMock)
 
 	Context("Testing CRUD Operations", func() {
 		Context("When user looks for all items", func() {
+			expectedItems := assertion.ItemArray
 			It("Should return all items from DB", func() {
-				resp, err := service.GetAll()
+				resp, err := s.GetAll()
 				Expect(err).ShouldNot(HaveOccurred())
-				Expect(resp).Should(Equal(assertion.ItemArray))
+				Expect(resp).Should(Equal(expectedItems))
 			})
 		})
 
 		Context("When user looks for an specific item", func() {
 			expectedItem := assertion.NewItemWithID(assertion.SampleID.String())
 			It("Should return an item with given ID", func() {
-				resp, err := service.GetOneByID(expectedItem.ID)
+				resp, err := s.GetOneByID(expectedItem.ID)
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(resp).Should(Equal(expectedItem))
 			})
@@ -38,7 +41,7 @@ var _ = Describe("Testing ServiceA Service", func() {
 		Context("When user creates an item", func() {
 			itemInput := assertion.NewItemWithoutID()
 			It("Should return the created object", func() {
-				resp, err := service.Create(itemInput)
+				resp, err := s.Create(itemInput)
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(resp.ID).ShouldNot(BeNil())
 			})
@@ -47,14 +50,14 @@ var _ = Describe("Testing ServiceA Service", func() {
 		Context("When user updates an item", func() {
 			inputItem := assertion.NewItemWithID(assertion.SampleID.String())
 			It("Should return nothing", func() {
-				err := service.Update(assertion.SampleID, inputItem)
+				err := s.Update(assertion.SampleID, inputItem)
 				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 
 		Context("When user deletes an item", func() {
 			It("Should return nothing", func() {
-				err := service.Delete(assertion.SampleID)
+				err := s.Delete(assertion.SampleID)
 				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
