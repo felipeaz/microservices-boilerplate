@@ -3,8 +3,8 @@ package service
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	assertion "microservices-boilerplate/testing/assertion/serviceA"
-	mock "microservices-boilerplate/testing/mocks/pkg"
+	assertion "microservices-boilerplate/test/assertion/serviceA"
+	mock "microservices-boilerplate/test/mocks/pkg"
 	"testing"
 )
 
