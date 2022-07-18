@@ -11,12 +11,12 @@ import (
 	mock "microservices-boilerplate/internal/test/mocks/pkg"
 )
 
-func TestServiceA(t *testing.T) {
+func TestService(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Service B Suits")
+	RunSpecs(t, "Service Suits")
 }
 
-var _ = Describe("Service A", func() {
+var _ = Describe("Service", func() {
 	logMock := new(mock.Logger)
 	s := service.New(logMock)
 

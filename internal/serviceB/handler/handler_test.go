@@ -7,12 +7,12 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestLog(t *testing.T) {
+func TestHandler(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ServiceB Suits")
+	RunSpecs(t, "Handler Suits")
 }
 
-var _ = Describe("Testing ServiceB Handler", func() {
+var _ = Describe("Handler", func() {
 	Context("CRUD Operations", func() {
 		Context("When user looks for all items", func() {
 			It("Should return all items from DB", func() {})
