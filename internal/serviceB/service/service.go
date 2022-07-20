@@ -10,9 +10,9 @@ import (
 )
 
 type Service interface {
-	GetAll(ctx context.Context) ([]domain.ItemB, error)
-	GetOneByID(ctx context.Context, id uuid.UUID) (domain.ItemB, error)
-	Create(ctx context.Context, item domain.ItemB) (domain.ItemB, error)
+	GetAll(ctx context.Context) ([]*domain.ItemB, error)
+	GetOneByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error)
+	Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, error)
 	Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error
 	Delete(ctx context.Context, id uuid.UUID) error
 }
@@ -27,17 +27,17 @@ type service struct {
 	log pkg.Logger
 }
 
-func (s service) GetAll(ctx context.Context) ([]domain.ItemB, error) {
+func (s service) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) GetOneByID(ctx context.Context, id uuid.UUID) (domain.ItemB, error) {
+func (s service) GetOneByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) Create(ctx context.Context, item domain.ItemB) (domain.ItemB, error) {
+func (s service) Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }

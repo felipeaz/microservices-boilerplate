@@ -48,7 +48,7 @@ var _ = Describe("Service", func() {
 			When("Request succeeds", func() {
 				itemInput := assertion.NewItemWithoutID()
 				It("Should return the created object", func() {
-					resp, err := s.Create(assertion.Ctx, itemInput)
+					resp, err := s.Create(assertion.Ctx, *itemInput)
 					Expect(err).ShouldNot(HaveOccurred())
 					Expect(resp.ID).NotTo(BeNil())
 				})
@@ -59,7 +59,7 @@ var _ = Describe("Service", func() {
 			When("Request succeeds", func() {
 				inputItem := assertion.NewItemWithID(assertion.SampleID.String())
 				It("Should return nothing", func() {
-					err := s.Update(assertion.Ctx, assertion.SampleID, inputItem)
+					err := s.Update(assertion.Ctx, assertion.SampleID, *inputItem)
 					Expect(err).ShouldNot(HaveOccurred())
 				})
 			})
