@@ -1,9 +1,8 @@
-package cache
+package redis
 
 import (
-	"fmt"
-
 	redigo "github.com/gomodule/redigo/redis"
+	"log"
 
 	"microservices-boilerplate/internal/storage"
 )
@@ -12,7 +11,7 @@ type redis struct {
 	addr string
 }
 
-func NewRedis(host string) storage.Cache {
+func New(host string) storage.Cache {
 	return redis{
 		addr: host,
 	}
@@ -21,10 +20,9 @@ func NewRedis(host string) storage.Cache {
 func (r redis) connect() (redigo.Conn, error) {
 	conn, err := redigo.Dial("tcp", r.addr)
 	if err != nil {
-		return conn, fmt.Errorf("failed to connect to dial redis: %v", err)
+		log.Printf("failed to connect to redis server: %v\n", err)
 	}
-
-	return conn, nil
+	return conn, err
 }
 
 func (r redis) Set(key string, value interface{}) error {
@@ -36,7 +34,7 @@ func (r redis) Set(key string, value interface{}) error {
 
 	_, err = conn.Do("SET", key, value)
 	if err != nil {
-		err = fmt.Errorf("error setting key %s with value %s: %v", key, value, err)
+		log.Printf("failed to set key %s, value %s: %v\n", key, value, err)
 	}
 	return err
 }
@@ -50,7 +48,7 @@ func (r redis) Get(key string) ([]byte, error) {
 
 	data, err := redigo.Bytes(conn.Do("GET", key))
 	if err != nil {
-		err = fmt.Errorf("error getting key %s: %v", key, err)
+		log.Printf("failed to get key %s: %v\n", key, err)
 	}
 	return data, err
 }
@@ -64,7 +62,7 @@ func (r redis) Remove(key string) error {
 
 	_, err = conn.Do("DEL", key)
 	if err != nil {
-		return fmt.Errorf("failed to remove key %s: %v", key, err)
+		log.Printf("failed to remove key %s: %v\n", key, err)
 	}
-	return nil
+	return err
 }
