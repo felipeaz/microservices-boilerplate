@@ -5,8 +5,8 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
+	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/serviceB/domain"
-	"microservices-boilerplate/pkg"
 )
 
 type Service interface {
