@@ -4,13 +4,15 @@ import (
 	"fmt"
 
 	redigo "github.com/gomodule/redigo/redis"
+
+	"microservices-boilerplate/internal/storage"
 )
 
 type redis struct {
 	addr string
 }
 
-func NewRedis(host string) Cache {
+func NewRedis(host string) storage.Cache {
 	return redis{
 		addr: host,
 	}
