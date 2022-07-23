@@ -1,9 +1,8 @@
 package main
 
 import (
-	"os"
-
 	"microservices-boilerplate/api/middleware"
+	"microservices-boilerplate/build/config"
 	"microservices-boilerplate/init/server"
 	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/serviceB/api"
@@ -14,9 +13,11 @@ import (
 )
 
 func main() {
-	// db := redis.New(os.Getenv("DB_HOST"))
-	cache := redis.New(os.Getenv("REDIS_HOST"))
-	logger := pkg.NewLogger(false)
+	cfg := config.Build()
+
+	// db := postgresql.New(config.Env.DBHost)
+	cache := redis.New(cfg.Env.CacheHost)
+	logger := pkg.NewLogger(*cfg.Flags.Debug)
 
 	apiServer := server.New(
 		api.New(
@@ -27,5 +28,5 @@ func main() {
 		),
 	)
 
-	apiServer.Run(os.Getenv("SERVER_ADDR"))
+	apiServer.Run(cfg.Env.Host)
 }
