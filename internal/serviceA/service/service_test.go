@@ -24,7 +24,7 @@ var _ = Describe("Service", func() {
 
 		Context("Getting All items", func() {
 			When("Request succeeds", func() {
-				expectedItems := assertion.ItemArray
+				expectedItems := assertion.ArrayOfItem
 				It("Should return all items from DB", func() {
 					resp, err := s.GetAll(assertion.Ctx)
 					Expect(err).ShouldNot(HaveOccurred())

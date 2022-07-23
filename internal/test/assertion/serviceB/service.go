@@ -1,4 +1,4 @@
-package serviceA
+package serviceB
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	ItemArray = []*domain.ItemB{
+	ArrayOfItem = []*domain.ItemB{
 		NewItemWithID("481da253-2dda-46e5-9963-58611eb72d7b"),
 		NewItemWithID("2a2acd06-c4ce-4bce-aaf9-09a379f02cf8"),
 		NewItemWithID("667f4eda-6825-445c-bf45-289f3b64b02b"),
