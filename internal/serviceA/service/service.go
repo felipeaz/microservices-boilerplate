@@ -7,6 +7,7 @@ import (
 
 	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/serviceA/domain"
+	"microservices-boilerplate/internal/serviceA/repository"
 )
 
 type Service interface {
@@ -17,14 +18,16 @@ type Service interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 }
 
-func New(log pkg.Logger) Service {
+func New(log pkg.Logger, repo repository.Repository) Service {
 	return service{
-		log: log,
+		log:        log,
+		repository: repo,
 	}
 }
 
 type service struct {
-	log pkg.Logger
+	log        pkg.Logger
+	repository repository.Repository
 }
 
 func (s service) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
