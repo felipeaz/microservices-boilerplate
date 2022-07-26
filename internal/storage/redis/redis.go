@@ -1,24 +1,28 @@
 package redis
 
 import (
-	redigo "github.com/gomodule/redigo/redis"
+	"fmt"
 	"log"
+
+	redigo "github.com/gomodule/redigo/redis"
 
 	"microservices-boilerplate/internal/storage"
 )
 
 type redis struct {
 	addr string
+	port string
 }
 
-func New(host string) storage.Cache {
+func New(host, port string) storage.Cache {
 	return redis{
 		addr: host,
+		port: port,
 	}
 }
 
 func (r redis) connect() (redigo.Conn, error) {
-	conn, err := redigo.Dial("tcp", r.addr)
+	conn, err := redigo.Dial("tcp", r.getHost())
 	if err != nil {
 		log.Printf("failed to connect to redis server: %v\n", err)
 	}
@@ -65,4 +69,8 @@ func (r redis) Remove(key string) error {
 		log.Printf("failed to remove key %s: %v\n", key, err)
 	}
 	return err
+}
+
+func (r redis) getHost() string {
+	return fmt.Sprintf("%s:%s", r.addr, r.port)
 }

@@ -3,30 +3,27 @@ package main
 import (
 	"microservices-boilerplate/api/middleware"
 	"microservices-boilerplate/build/config"
+	"microservices-boilerplate/build/env"
+	"microservices-boilerplate/build/flags"
 	"microservices-boilerplate/init/server"
-	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/serviceB/api"
 	"microservices-boilerplate/internal/serviceB/handler"
 	"microservices-boilerplate/internal/serviceB/repository"
 	"microservices-boilerplate/internal/serviceB/service"
-	"microservices-boilerplate/internal/storage/redis"
 )
 
 func main() {
-	cfg := config.Build()
-
-	// db := postgresql.New(config.Env.DBHost)
-	cache := redis.New(cfg.Env.CacheHost)
-	logger := pkg.NewLogger(*cfg.Flags.Debug)
-
+	cfg := config.Build(
+		env.Build(),
+		flags.Build(),
+	)
 	apiServer := server.New(
 		api.New(
 			handler.New(
-				service.New(logger, repository.New(cache)),
+				service.New(cfg.Log, repository.New(cfg.Database, cfg.Cache)),
 			),
 			middleware.New(),
 		),
 	)
-
-	apiServer.Run(cfg.Env.Host)
+	apiServer.Run(cfg.Addr)
 }

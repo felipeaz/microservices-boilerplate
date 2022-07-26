@@ -16,14 +16,16 @@ type Repository interface {
 	Remove(ctx context.Context, id uuid.UUID) (*domain.ItemB, error)
 }
 
-func New(cache storage.Cache) Repository {
+func New(db storage.Database, cache storage.Cache) Repository {
 	return repository{
-		cache: cache,
+		database: db,
+		cache:    cache,
 	}
 }
 
 type repository struct {
-	cache storage.Cache
+	database storage.Database
+	cache    storage.Cache
 }
 
 func (r repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
