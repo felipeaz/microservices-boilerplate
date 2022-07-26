@@ -1,9 +1,11 @@
 package postgresql
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"microservices-boilerplate/internal/storage"
 )
@@ -26,8 +28,11 @@ func New(host, port, user, pass, dbName string) storage.Database {
 	}
 }
 
-func (p *postgresql) connect() *sql.DB {
-	conn, err := sql.Open("postgresql", p.getDBInfo())
+func (p *postgresql) connect() *gorm.DB {
+	conn, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  p.getDBInfo(),
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect to postgresql: %v\n", err)
 	}
@@ -36,7 +41,7 @@ func (p *postgresql) connect() *sql.DB {
 
 func (p *postgresql) getDBInfo() string {
 	return fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=UTC",
 		p.host, p.port, p.username, p.password, p.dbName,
 	)
 }
