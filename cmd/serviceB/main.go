@@ -20,7 +20,10 @@ func main() {
 	apiServer := server.New(
 		api.New(
 			handler.New(
-				service.New(cfg.Log, repository.New(cfg.Database, cfg.Cache)),
+				service.New(
+					cfg.Log,
+					repository.New(cfg.Database, cfg.Cache),
+				),
 			),
 			middleware.New(),
 		),
