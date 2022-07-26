@@ -25,5 +25,5 @@ func main() {
 			middleware.New(),
 		),
 	)
-	apiServer.Run(cfg.Addr)
+	apiServer.Run(cfg.Port)
 }

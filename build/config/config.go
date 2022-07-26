@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	Addr     string
+	Port     string
 	Database storage.Database
 	Cache    storage.Cache
 	Log      pkg.Logger
@@ -18,7 +18,7 @@ type Config struct {
 
 func Build(env env.Env, flags flags.Flags) Config {
 	return Config{
-		Addr:     env.Port,
+		Port:     env.Port,
 		Database: postgresql.New(env.DBHost, env.DBPort, env.DBUsername, env.DBPassword),
 		Cache:    redis.New(env.CacheHost, env.CachePort),
 		Log:      pkg.NewLogger(*flags.Debug),
