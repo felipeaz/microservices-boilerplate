@@ -6,7 +6,7 @@ services:
     restart: always
     container_name: kong-db
     networks:
-      - lib-net
+      - services-network
     environment:
       POSTGRES_USER: kong
       POSTGRES_DB: kong
@@ -23,7 +23,7 @@ services:
     command: "kong migrations bootstrap"
     container_name: kong-migration
     networks:
-      - lib-net
+      - services-network
     restart: on-failure
     environment:
       - KONG_DATABASE=postgres
@@ -39,7 +39,7 @@ services:
     restart: always
     container_name: kong
     networks:
-      - lib-net
+      - services-network
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
@@ -65,7 +65,7 @@ services:
     command: "-c prepare -a postgres -u postgresql://kong:kong@kong-database:5432/konga"
     container_name: konga-prepare
     networks:
-      - lib-net
+      - services-network
     restart: on-failure
     environment:
       - KONG_DATABASE=postgres
@@ -81,7 +81,7 @@ services:
     restart: always
     container_name: konga
     networks:
-      - lib-net
+      - services-network
     environment:
       DB_ADAPTER: postgres
       DB_URI: postgresql://kong:kong@kong-database:5432/konga
@@ -94,6 +94,6 @@ services:
     ports:
       - "1337:1337"
 networks:
-  lib-net:
+  services-network:
     driver: bridge
-    name: "lib-net"
+    name: "services-network"

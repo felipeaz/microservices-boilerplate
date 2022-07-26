@@ -5,9 +5,9 @@ services:
     image: redis:alpine
     container_name: redis
     networks:
-      - lib-net
+      - services-network
     ports:
       - "6380:6379"
 networks:
-  lib-net:
+  services-network:
     external: true

@@ -7,7 +7,7 @@ services:
       dockerfile: "docker/images/go/Dockerfile"
     container_name: serviceA
     networks:
-      - lib-net
+      - services-network
     env_file:
       - ../../.env
     depends_on:
@@ -24,7 +24,7 @@ services:
     container_name: serviceA-database
     platform: linux/x86_64
     networks:
-      - lib-net
+      - services-network
     environment:
       MYSQL_DATABASE: Admin
       MYSQL_ROOT_PASSWORD: admin123
@@ -32,5 +32,5 @@ services:
     ports:
       - "3308:3307"
 networks:
-  lib-net:
+  services-network:
     external: true

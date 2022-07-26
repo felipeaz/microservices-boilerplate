@@ -7,7 +7,7 @@ services:
       dockerfile: "docker/images/go/Dockerfile"
     container_name: serviceB
     networks:
-      - lib-net
+      - services-network
     env_file:
       - ../../.env
     links:
@@ -27,7 +27,7 @@ services:
     container_name: serviceB-database
     platform: linux/x86_64
     networks:
-      - lib-net
+      - services-network
     environment:
       MYSQL_DATABASE: LibraryPlatform
       MYSQL_ROOT_PASSWORD: abc123
@@ -35,5 +35,5 @@ services:
     ports:
       - "3309:3306"
 networks:
-  lib-net:
+  services-network:
     external: true
