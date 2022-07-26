@@ -21,7 +21,7 @@ func main() {
 		api.New(
 			handler.New(
 				service.New(
-					cfg.Log,
+					cfg.Logger,
 					repository.New(cfg.Database, cfg.Cache),
 				),
 			),

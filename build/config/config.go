@@ -13,7 +13,7 @@ type Config struct {
 	Port     string
 	Database storage.Database
 	Cache    storage.Cache
-	Log      pkg.Logger
+	Logger   pkg.Logger
 }
 
 func Build(env env.Env, flags flags.Flags) Config {
@@ -21,6 +21,6 @@ func Build(env env.Env, flags flags.Flags) Config {
 		Port:     env.Port,
 		Database: postgresql.New(env.DBHost, env.DBPort, env.DBUsername, env.DBPassword, env.DBName),
 		Cache:    redis.New(env.CacheHost, env.CachePort),
-		Log:      pkg.NewLogger(*flags.Debug),
+		Logger:   pkg.NewLogger(*flags.Debug),
 	}
 }
