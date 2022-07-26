@@ -10,6 +10,7 @@ const (
 	dbPortEnv     = "DB_PORT"
 	dbUsernameEnv = "DB_USERNAME"
 	dbPasswordEnv = "DB_PASSWORD"
+	dbNameEnv     = "DB_NAME"
 	cacheHostEnv  = "CACHE_HOST"
 	cachePortEnv  = "CACHE_PORT"
 	hostEnv       = "SERVER_HOST"
@@ -23,6 +24,7 @@ type Env struct {
 	DBPort     string
 	DBUsername string
 	DBPassword string
+	DBName     string
 	CacheHost  string
 	CachePort  string
 	Host       string
@@ -47,6 +49,10 @@ func Build() Env {
 	env.DBPassword, ok = os.LookupEnv(dbPasswordEnv)
 	if !ok {
 		log.Fatalf(missingEnvErr, dbPasswordEnv)
+	}
+	env.DBName, ok = os.LookupEnv(dbNameEnv)
+	if !ok {
+		log.Fatalf(missingEnvErr, dbNameEnv)
 	}
 	env.CacheHost, ok = os.LookupEnv(cacheHostEnv)
 	if !ok {

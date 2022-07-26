@@ -15,39 +15,33 @@ type redis struct {
 }
 
 func New(host, port string) storage.Cache {
-	return redis{
+	return &redis{
 		addr: host,
 		port: port,
 	}
 }
 
-func (r redis) connect() (redigo.Conn, error) {
+func (r *redis) connect() redigo.Conn {
 	conn, err := redigo.Dial("tcp", r.getHost())
 	if err != nil {
-		log.Printf("failed to connect to redis server: %v\n", err)
+		log.Fatalf("failed to connect to redis server: %v\n", err)
 	}
-	return conn, err
+	return conn
 }
 
-func (r redis) Set(key string, value interface{}) error {
-	conn, err := r.connect()
-	if err != nil {
-		return err
-	}
+func (r *redis) Set(key string, value interface{}) error {
+	conn := r.connect()
 	defer conn.Close()
 
-	_, err = conn.Do("SET", key, value)
+	_, err := conn.Do("SET", key, value)
 	if err != nil {
 		log.Printf("failed to set key %s, value %s: %v\n", key, value, err)
 	}
 	return err
 }
 
-func (r redis) Get(key string) ([]byte, error) {
-	conn, err := r.connect()
-	if err != nil {
-		return nil, err
-	}
+func (r *redis) Get(key string) ([]byte, error) {
+	conn := r.connect()
 	defer conn.Close()
 
 	data, err := redigo.Bytes(conn.Do("GET", key))
@@ -57,20 +51,17 @@ func (r redis) Get(key string) ([]byte, error) {
 	return data, err
 }
 
-func (r redis) Remove(key string) error {
-	conn, err := r.connect()
-	if err != nil {
-		return err
-	}
+func (r *redis) Remove(key string) error {
+	conn := r.connect()
 	defer conn.Close()
 
-	_, err = conn.Do("DEL", key)
+	_, err := conn.Do("DEL", key)
 	if err != nil {
 		log.Printf("failed to remove key %s: %v\n", key, err)
 	}
 	return err
 }
 
-func (r redis) getHost() string {
+func (r *redis) getHost() string {
 	return fmt.Sprintf("%s:%s", r.addr, r.port)
 }
