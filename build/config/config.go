@@ -5,8 +5,8 @@ import (
 	"microservices-boilerplate/build/flags"
 	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/storage"
-	"microservices-boilerplate/internal/storage/postgresql"
-	"microservices-boilerplate/internal/storage/redis"
+	"microservices-boilerplate/third_party/postgresql"
+	"microservices-boilerplate/third_party/redis"
 )
 
 type Config struct {
