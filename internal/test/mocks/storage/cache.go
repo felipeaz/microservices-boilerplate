@@ -1,4 +1,4 @@
-package cache
+package storage
 
 import "github.com/stretchr/testify/mock"
 
