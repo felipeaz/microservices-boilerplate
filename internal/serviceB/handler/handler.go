@@ -46,7 +46,7 @@ func (h Handler) Find(c *gin.Context) {
 }
 
 func (h Handler) Create(c *gin.Context) {
-	var input domain.ItemB
+	var input *domain.ItemB
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
@@ -64,7 +64,7 @@ func (h Handler) Create(c *gin.Context) {
 }
 
 func (h Handler) Update(c *gin.Context) {
-	var input domain.ItemB
+	var input *domain.ItemB
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)

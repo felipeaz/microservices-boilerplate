@@ -13,8 +13,8 @@ import (
 type Service interface {
 	GetAll(ctx context.Context) ([]*domain.ItemB, error)
 	GetOneByID(ctx context.Context, id string) (*domain.ItemB, error)
-	Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, error)
-	Update(ctx context.Context, id string, item domain.ItemB) error
+	Create(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error)
+	Update(ctx context.Context, id string, item *domain.ItemB) error
 	Delete(ctx context.Context, id string) error
 }
 
@@ -56,7 +56,7 @@ func (s service) GetOneByID(ctx context.Context, id string) (*domain.ItemB, erro
 	return resp, nil
 }
 
-func (s service) Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, error) {
+func (s service) Create(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
 	resp, err := s.repository.Insert(ctx, item)
 	if err != nil {
 		s.log.Error("failed to create item", item, err)
@@ -66,7 +66,7 @@ func (s service) Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, 
 	return resp, nil
 }
 
-func (s service) Update(ctx context.Context, id string, item domain.ItemB) error {
+func (s service) Update(ctx context.Context, id string, item *domain.ItemB) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)

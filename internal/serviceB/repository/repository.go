@@ -12,8 +12,8 @@ import (
 type Repository interface {
 	GetAll(ctx context.Context) ([]*domain.ItemB, error)
 	GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error)
-	Insert(ctx context.Context, item domain.ItemB) (*domain.ItemB, error)
-	Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error
+	Insert(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error)
+	Update(ctx context.Context, id uuid.UUID, item *domain.ItemB) error
 	Remove(ctx context.Context, id uuid.UUID) error
 }
 
@@ -71,21 +71,20 @@ func (r repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, e
 	return item, nil
 }
 
-func (r repository) Insert(ctx context.Context, item domain.ItemB) (*domain.ItemB, error) {
+func (r repository) Insert(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
 	err := r.cache.Remove("all-itemA")
 	if err != nil {
 		return nil, err
 	}
 
-	input := &item
-	if err = r.database.Create(input); err != nil {
+	if err = r.database.Create(item); err != nil {
 		return nil, err
 	}
 
-	return input, nil
+	return item, nil
 }
 
-func (r repository) Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error {
+func (r repository) Update(ctx context.Context, id uuid.UUID, item *domain.ItemB) error {
 	err := r.cache.Remove(id.String())
 	if err != nil {
 		return err
