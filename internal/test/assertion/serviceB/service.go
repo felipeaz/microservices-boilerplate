@@ -2,8 +2,11 @@ package serviceB
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 
 	"microservices-boilerplate/internal/serviceB/domain"
 )
@@ -16,9 +19,14 @@ var (
 		NewItemWithID("4740de96-9068-4a3a-bdc6-132ad7c58bae"),
 	}
 
-	SampleID = uuid.FromStringOrNil("15664c2f-d5bf-4922-8d19-39c6886bce90")
+	SampleID        = uuid.FromStringOrNil("15664c2f-d5bf-4922-8d19-39c6886bce90")
+	InvalidIDString = "15664c2f"
 
 	Ctx = context.Background()
+
+	ErrGeneric      = errors.New("generic error")
+	ErrNotFound     = gorm.ErrRecordNotFound
+	ErrCreatingUUID = errors.New("failed to create UUID from string")
 )
 
 func NewItemWithID(id string) *domain.ItemB {
@@ -27,6 +35,18 @@ func NewItemWithID(id string) *domain.ItemB {
 	}
 }
 
+func NewItemFromInput(input *domain.ItemB) *domain.ItemB {
+	newItem := input
+	if len(input.ID.Bytes()) == 0 {
+		newItem.ID = uuid.NewV4()
+	}
+	return newItem
+}
+
 func NewItemWithoutID() *domain.ItemB {
 	return &domain.ItemB{}
+}
+
+func NewErrIncorrectIDLength(id string) error {
+	return fmt.Errorf("uuid: incorrect UUID length: %s", id)
 }
