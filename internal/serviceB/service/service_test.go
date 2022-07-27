@@ -37,9 +37,10 @@ var _ = Describe("Service", func() {
 
 		Context("Getting one item by ID", func() {
 			When("Request succeeds", func() {
-				expectedItem := assertion.NewItemWithID(assertion.SampleID.String())
+				idString := assertion.SampleID.String()
+				expectedItem := assertion.NewItemWithID(idString)
 				It("Should return an item with given ID", func() {
-					resp, err := s.GetOneByID(assertion.Ctx, expectedItem.ID)
+					resp, err := s.GetOneByID(assertion.Ctx, expectedItem.ID.String())
 					Expect(err).ShouldNot(HaveOccurred())
 					Expect(resp).To(Equal(expectedItem))
 				})
@@ -50,7 +51,7 @@ var _ = Describe("Service", func() {
 			When("Request succeeds", func() {
 				itemInput := assertion.NewItemWithoutID()
 				It("Should return the created object", func() {
-					resp, err := s.Create(assertion.Ctx, *itemInput)
+					resp, err := s.Create(assertion.Ctx, itemInput)
 					Expect(err).ShouldNot(HaveOccurred())
 					Expect(resp.ID).NotTo(BeNil())
 				})
@@ -59,9 +60,10 @@ var _ = Describe("Service", func() {
 
 		Context("Updating an item", func() {
 			When("Request succeeds", func() {
-				inputItem := assertion.NewItemWithID(assertion.SampleID.String())
+				idString := assertion.SampleID.String()
+				inputItem := assertion.NewItemWithID(idString)
 				It("Should return nothing", func() {
-					err := s.Update(assertion.Ctx, assertion.SampleID, *inputItem)
+					err := s.Update(assertion.Ctx, idString, inputItem)
 					Expect(err).ShouldNot(HaveOccurred())
 				})
 			})
@@ -70,7 +72,7 @@ var _ = Describe("Service", func() {
 		Context("Deleting an item", func() {
 			When("Request succeeds", func() {
 				It("Should return nothing", func() {
-					err := s.Delete(assertion.Ctx, assertion.SampleID)
+					err := s.Delete(assertion.Ctx, assertion.SampleID.String())
 					Expect(err).ShouldNot(HaveOccurred())
 				})
 			})
