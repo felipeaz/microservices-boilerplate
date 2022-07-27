@@ -5,7 +5,7 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"microservices-boilerplate/internal/errors"
+	"microservices-boilerplate/internal/constants"
 	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/serviceA/domain"
 	"microservices-boilerplate/internal/serviceA/repository"
@@ -45,7 +45,7 @@ func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, err
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)
-		return nil, errors.ErrCreatingUUIDFromString
+		return nil, constants.ErrCreatingUUIDFromString
 	}
 
 	resp, err := s.repository.GetByID(ctx, itemID)
@@ -71,7 +71,7 @@ func (s *service) Update(ctx context.Context, id string, item *domain.ItemA) err
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)
-		return errors.ErrCreatingUUIDFromString
+		return constants.ErrCreatingUUIDFromString
 	}
 
 	if err = s.repository.Update(ctx, itemID, item); err != nil {
@@ -86,7 +86,7 @@ func (s *service) Delete(ctx context.Context, id string) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)
-		return errors.ErrCreatingUUIDFromString
+		return constants.ErrCreatingUUIDFromString
 	}
 
 	if err = s.repository.Remove(ctx, itemID); err != nil {
