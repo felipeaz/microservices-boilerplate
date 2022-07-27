@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	uuid "github.com/satori/go.uuid"
 
 	"microservices-boilerplate/internal/serviceB/domain"
@@ -12,8 +13,8 @@ type Repository interface {
 	GetAll(ctx context.Context) ([]*domain.ItemB, error)
 	GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error)
 	Insert(ctx context.Context, item domain.ItemB) (*domain.ItemB, error)
-	Update(ctx context.Context, id uuid.UUID, item domain.ItemB) (*domain.ItemB, error)
-	Remove(ctx context.Context, id uuid.UUID) (*domain.ItemB, error)
+	Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error
+	Remove(ctx context.Context, id uuid.UUID) error
 }
 
 func New(db storage.Database, cache storage.Cache) Repository {
@@ -64,28 +65,28 @@ func (r repository) Insert(ctx context.Context, item domain.ItemB) (*domain.Item
 	panic("implement me")
 }
 
-func (r repository) Update(ctx context.Context, id uuid.UUID, item domain.ItemB) (*domain.ItemB, error) {
+func (r repository) Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error {
 	err := r.cache.Remove(id.String())
 	if err != nil {
-		return nil, err
+		return err
 	}
 	err = r.cache.Remove("all-itemB")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	//TODO implement me
 	panic("implement me")
 }
 
-func (r repository) Remove(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
+func (r repository) Remove(ctx context.Context, id uuid.UUID) error {
 	err := r.cache.Remove(id.String())
 	if err != nil {
-		return nil, err
+		return err
 	}
 	err = r.cache.Remove("all-itemB")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	//TODO implement me
