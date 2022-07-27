@@ -8,7 +8,8 @@ import (
 
 	"microservices-boilerplate/internal/serviceA/service"
 	assertion "microservices-boilerplate/internal/test/assertion/serviceA"
-	mock "microservices-boilerplate/internal/test/mocks/pkg"
+	pkgMock "microservices-boilerplate/internal/test/mocks/pkg"
+	repositoryMock "microservices-boilerplate/internal/test/mocks/serviceA/repository"
 )
 
 func TestService(t *testing.T) {
@@ -17,8 +18,9 @@ func TestService(t *testing.T) {
 }
 
 var _ = Describe("Service", func() {
-	logMock := new(mock.Logger)
-	s := service.New(logMock)
+	logMock := new(pkgMock.Logger)
+	repoMock := new(repositoryMock.Repository)
+	s := service.New(logMock, repoMock)
 
 	Context("Testing CRUD Operations", func() {
 
