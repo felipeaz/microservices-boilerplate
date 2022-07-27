@@ -27,8 +27,8 @@ var _ = Describe("Service", func() {
 
 		Context("Getting All items", func() {
 			When("Request succeeds", func() {
-				expectedItems := assertion.ArrayOfItem
 				It("Should return all items from DB", func() {
+					expectedItems := assertion.ArrayOfItem
 					repoMock.On("GetAll", assertion.Ctx).
 						Return(expectedItems, nil).
 						Once()
@@ -70,9 +70,9 @@ var _ = Describe("Service", func() {
 
 		Context("Getting one item by ID", func() {
 			When("Request succeeds", func() {
-				idString := assertion.SampleID.String()
-				expectedItem := assertion.NewItemWithID(idString)
 				It("Should return an item with given ID", func() {
+					idString := assertion.SampleID.String()
+					expectedItem := assertion.NewItemWithID(idString)
 					repoMock.On("GetByID", assertion.Ctx, assertion.SampleID).
 						Return(expectedItem, nil).
 						Once()
@@ -117,9 +117,9 @@ var _ = Describe("Service", func() {
 
 		Context("Creating an item", func() {
 			When("Request succeeds", func() {
-				itemInput := assertion.NewItemWithoutID()
-				expectedItem := assertion.NewItemFromInput(itemInput)
 				It("Should return the created object", func() {
+					itemInput := assertion.NewItemWithoutID()
+					expectedItem := assertion.NewItemFromInput(itemInput)
 					repoMock.On("Insert", assertion.Ctx, itemInput).
 						Return(expectedItem, nil).
 						Once()
@@ -132,8 +132,8 @@ var _ = Describe("Service", func() {
 				})
 			})
 			When("Request fails", func() {
-				itemInput := assertion.NewItemWithoutID()
 				It("Should return an error", func() {
+					itemInput := assertion.NewItemWithoutID()
 					repoMock.On("Insert", assertion.Ctx, itemInput).
 						Return(nil, assertion.ErrGeneric).
 						Once()
@@ -152,9 +152,9 @@ var _ = Describe("Service", func() {
 
 		Context("Updating an item", func() {
 			When("Request succeeds", func() {
-				idString := assertion.SampleID.String()
-				inputItem := assertion.NewItemWithID(idString)
 				It("Should return nothing", func() {
+					idString := assertion.SampleID.String()
+					inputItem := assertion.NewItemWithID(idString)
 					repoMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
 						Return(nil).
 						Once()
@@ -164,9 +164,9 @@ var _ = Describe("Service", func() {
 				})
 			})
 			When("Request fails", func() {
-				idString := assertion.SampleID.String()
-				inputItem := assertion.NewItemWithID(idString)
 				It("Should return an error", func() {
+					idString := assertion.SampleID.String()
+					inputItem := assertion.NewItemWithID(idString)
 					repoMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
 						Return(assertion.ErrGeneric).
 						Once()
@@ -180,9 +180,9 @@ var _ = Describe("Service", func() {
 				})
 			})
 			When("Fails to parse UUID from string", func() {
-				idString := assertion.InvalidIDString
-				inputItem := assertion.NewItemWithID(idString)
 				It("Should return an error", func() {
+					idString := assertion.InvalidIDString
+					inputItem := assertion.NewItemWithID(idString)
 					logMock.On(
 						"Error",
 						mock.Anything,
