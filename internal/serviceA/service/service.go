@@ -20,7 +20,7 @@ type Service interface {
 }
 
 func New(log pkg.Logger, repo repository.Repository) Service {
-	return service{
+	return &service{
 		log:        log,
 		repository: repo,
 	}
@@ -31,7 +31,7 @@ type service struct {
 	repository repository.Repository
 }
 
-func (s service) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
+func (s *service) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 	resp, err := s.repository.GetAll(ctx)
 	if err != nil {
 		s.log.Error("failed to get all item a", err)
@@ -41,7 +41,7 @@ func (s service) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 	return resp, nil
 }
 
-func (s service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, error) {
+func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, error) {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)
@@ -57,7 +57,7 @@ func (s service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, erro
 	return resp, nil
 }
 
-func (s service) Create(ctx context.Context, item *domain.ItemA) (*domain.ItemA, error) {
+func (s *service) Create(ctx context.Context, item *domain.ItemA) (*domain.ItemA, error) {
 	resp, err := s.repository.Insert(ctx, item)
 	if err != nil {
 		s.log.Error("failed to create item", item, err)
@@ -67,7 +67,7 @@ func (s service) Create(ctx context.Context, item *domain.ItemA) (*domain.ItemA,
 	return resp, nil
 }
 
-func (s service) Update(ctx context.Context, id string, item *domain.ItemA) error {
+func (s *service) Update(ctx context.Context, id string, item *domain.ItemA) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)
@@ -82,7 +82,7 @@ func (s service) Update(ctx context.Context, id string, item *domain.ItemA) erro
 	return nil
 }
 
-func (s service) Delete(ctx context.Context, id string) error {
+func (s *service) Delete(ctx context.Context, id string) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.log.Error("failed to parse id to UUID", err)

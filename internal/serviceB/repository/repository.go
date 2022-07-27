@@ -18,7 +18,7 @@ type Repository interface {
 }
 
 func New(db storage.Database, cache storage.Cache) Repository {
-	return repository{
+	return &repository{
 		database: db,
 		cache:    cache,
 	}
@@ -29,7 +29,7 @@ type repository struct {
 	cache    storage.Cache
 }
 
-func (r repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
+func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 	cacheData, err := r.cache.Get("all-itemA")
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (r repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 	return itemArr, nil
 }
 
-func (r repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
+func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
 	cacheData, err := r.cache.Get(id.String())
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (r repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, e
 	return item, nil
 }
 
-func (r repository) Insert(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
+func (r *repository) Insert(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
 	err := r.cache.Remove("all-itemA")
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (r repository) Insert(ctx context.Context, item *domain.ItemB) (*domain.Ite
 	return item, nil
 }
 
-func (r repository) Update(ctx context.Context, id uuid.UUID, item *domain.ItemB) error {
+func (r *repository) Update(ctx context.Context, id uuid.UUID, item *domain.ItemB) error {
 	err := r.cache.Remove(id.String())
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func (r repository) Update(ctx context.Context, id uuid.UUID, item *domain.ItemB
 	return r.database.Update(id, item)
 }
 
-func (r repository) Remove(ctx context.Context, id uuid.UUID) error {
+func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
 	err := r.cache.Remove(id.String())
 	if err != nil {
 		return err
