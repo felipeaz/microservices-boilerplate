@@ -30,7 +30,7 @@ type repository struct {
 }
 
 func (r repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
-	cacheData, err := r.cache.Get("all-itemB")
+	cacheData, err := r.cache.Get("all-itemA")
 	if err != nil {
 		return nil, err
 	}
@@ -38,8 +38,16 @@ func (r repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 		return domain.NewArrayFromBytes(cacheData)
 	}
 
-	//TODO implement me
-	panic("implement me")
+	var itemArr []*domain.ItemB
+	if err = r.database.Select(&itemArr); err != nil {
+		return nil, err
+	}
+
+	if err = r.cache.Set("all-itemA", itemArr); err != nil {
+		return nil, err
+	}
+
+	return itemArr, nil
 }
 
 func (r repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
@@ -51,18 +59,30 @@ func (r repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, e
 		return domain.NewFromBytes(cacheData)
 	}
 
-	//TODO implement me
-	panic("implement me")
+	item := &domain.ItemB{ID: id}
+	if err = r.database.Select(item); err != nil {
+		return nil, err
+	}
+
+	if err = r.cache.Set(id.String(), item); err != nil {
+		return nil, err
+	}
+
+	return item, nil
 }
 
 func (r repository) Insert(ctx context.Context, item domain.ItemB) (*domain.ItemB, error) {
-	err := r.cache.Remove("all-itemB")
+	err := r.cache.Remove("all-itemA")
 	if err != nil {
 		return nil, err
 	}
 
-	//TODO implement me
-	panic("implement me")
+	input := &item
+	if err = r.database.Create(input); err != nil {
+		return nil, err
+	}
+
+	return input, nil
 }
 
 func (r repository) Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error {
@@ -70,13 +90,12 @@ func (r repository) Update(ctx context.Context, id uuid.UUID, item domain.ItemB)
 	if err != nil {
 		return err
 	}
-	err = r.cache.Remove("all-itemB")
+	err = r.cache.Remove("all-itemA")
 	if err != nil {
 		return err
 	}
 
-	//TODO implement me
-	panic("implement me")
+	return r.database.Update(id, item)
 }
 
 func (r repository) Remove(ctx context.Context, id uuid.UUID) error {
@@ -84,11 +103,10 @@ func (r repository) Remove(ctx context.Context, id uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-	err = r.cache.Remove("all-itemB")
+	err = r.cache.Remove("all-itemA")
 	if err != nil {
 		return err
 	}
 
-	//TODO implement me
-	panic("implement me")
+	return r.database.Delete(id, domain.ItemB{})
 }

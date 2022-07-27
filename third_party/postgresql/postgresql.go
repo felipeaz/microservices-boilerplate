@@ -3,6 +3,7 @@ package postgresql
 import (
 	"database/sql"
 	"fmt"
+	uuid "github.com/satori/go.uuid"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -50,10 +51,10 @@ func (p *postgresql) Create(obj interface{}) error {
 	return conn.Create(obj).Error
 }
 
-func (p *postgresql) Update(obj interface{}) error {
+func (p *postgresql) Update(id uuid.UUID, obj interface{}) error {
 	conn, db := p.connect()
 	defer db.Close()
-	return conn.Updates(obj).Error
+	return conn.Where("id = ?", id).Updates(obj).Error
 }
 
 func (p *postgresql) Set(obj interface{}, field string, value interface{}) error {
@@ -74,10 +75,10 @@ func (p *postgresql) Raw(query string, obj interface{}) error {
 	return conn.Raw(query).Scan(obj).Error
 }
 
-func (p *postgresql) Delete(obj interface{}) error {
+func (p *postgresql) Delete(id uuid.UUID, obj interface{}) error {
 	conn, db := p.connect()
 	defer db.Close()
-	return conn.Delete(obj).Error
+	return conn.Where("id = ?", id).Delete(obj).Error
 }
 
 func (p *postgresql) getDBInfo() string {
