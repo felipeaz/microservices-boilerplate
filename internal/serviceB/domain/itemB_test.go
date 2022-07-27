@@ -22,7 +22,7 @@ var _ = Describe("Domain", func() {
 				itemID := assertion.SampleID.String()
 				expect := assertion.NewItemWithID(itemID)
 
-				item, err := domain.NewFromBytes(assertion.ItemBInBytes(itemID))
+				item, err := domain.NewFromBytes(assertion.ItemBInBytes(expect))
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(item).To(Equal(expect))
 			})
@@ -37,7 +37,7 @@ var _ = Describe("Domain", func() {
 			It("Should return an array of item", func() {
 				expect := assertion.ArrayOfItem
 
-				itemArr, err := domain.NewArrayFromBytes(assertion.ArrayOfItemBInBytes())
+				itemArr, err := domain.NewArrayFromBytes(assertion.ArrayOfItemBInBytes(expect))
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(itemArr).To(Equal(expect))
 			})

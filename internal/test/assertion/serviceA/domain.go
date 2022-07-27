@@ -2,14 +2,16 @@ package serviceA
 
 import (
 	"encoding/json"
+
+	"microservices-boilerplate/internal/serviceA/domain"
 )
 
-func ItemAInBytes(id string) []byte {
-	b, _ := json.Marshal(NewItemWithID(id))
+func ItemAInBytes(item *domain.ItemA) []byte {
+	b, _ := json.Marshal(item)
 	return b
 }
 
-func ArrayOfItemAInBytes() []byte {
-	b, _ := json.Marshal(ArrayOfItem)
+func ArrayOfItemAInBytes(arr []*domain.ItemA) []byte {
+	b, _ := json.Marshal(arr)
 	return b
 }

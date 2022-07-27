@@ -24,7 +24,6 @@ var _ = Describe("Service", func() {
 	s := service.New(logMock, repoMock)
 
 	Context("Testing CRUD Operations", func() {
-
 		Context("Getting All items", func() {
 			When("Request succeeds", func() {
 				It("Should return all items from DB", func() {

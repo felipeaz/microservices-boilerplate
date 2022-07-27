@@ -9,6 +9,10 @@ import (
 	"microservices-boilerplate/internal/storage"
 )
 
+const (
+	AllItemsKey = "all-items"
+)
+
 type Repository interface {
 	GetAll(ctx context.Context) ([]*domain.ItemA, error)
 	GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemA, error)
@@ -30,7 +34,7 @@ type repository struct {
 }
 
 func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
-	cacheData, err := r.cache.Get("all-itemA")
+	cacheData, err := r.cache.Get(AllItemsKey)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +47,7 @@ func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 		return nil, err
 	}
 
-	if err = r.cache.Set("all-itemA", itemArr); err != nil {
+	if err = r.cache.Set(AllItemsKey, itemArr); err != nil {
 		return nil, err
 	}
 
@@ -72,7 +76,7 @@ func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemA, 
 }
 
 func (r *repository) Insert(ctx context.Context, item *domain.ItemA) (*domain.ItemA, error) {
-	err := r.cache.Remove("all-itemA")
+	err := r.cache.Remove(AllItemsKey)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +93,7 @@ func (r *repository) Update(ctx context.Context, id uuid.UUID, item *domain.Item
 	if err != nil {
 		return err
 	}
-	err = r.cache.Remove("all-itemA")
+	err = r.cache.Remove(AllItemsKey)
 	if err != nil {
 		return err
 	}
@@ -102,7 +106,7 @@ func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-	err = r.cache.Remove("all-itemA")
+	err = r.cache.Remove(AllItemsKey)
 	if err != nil {
 		return err
 	}
