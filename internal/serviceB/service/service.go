@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 
-	uuid "github.com/satori/go.uuid"
-
 	"microservices-boilerplate/internal/pkg"
 	"microservices-boilerplate/internal/serviceB/domain"
 	"microservices-boilerplate/internal/serviceB/repository"
@@ -12,10 +10,10 @@ import (
 
 type Service interface {
 	GetAll(ctx context.Context) ([]*domain.ItemB, error)
-	GetOneByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error)
+	GetOneByID(ctx context.Context, id string) (*domain.ItemB, error)
 	Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, error)
-	Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error
-	Delete(ctx context.Context, id uuid.UUID) error
+	Update(ctx context.Context, id string, item domain.ItemB) error
+	Delete(ctx context.Context, id string) error
 }
 
 func New(log pkg.Logger, repo repository.Repository) Service {
@@ -35,7 +33,7 @@ func (s service) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 	panic("implement me")
 }
 
-func (s service) GetOneByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
+func (s service) GetOneByID(ctx context.Context, id string) (*domain.ItemB, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -45,12 +43,12 @@ func (s service) Create(ctx context.Context, item domain.ItemB) (*domain.ItemB, 
 	panic("implement me")
 }
 
-func (s service) Update(ctx context.Context, id uuid.UUID, item domain.ItemB) error {
+func (s service) Update(ctx context.Context, id string, item domain.ItemB) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s service) Delete(ctx context.Context, id uuid.UUID) error {
+func (s service) Delete(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }
