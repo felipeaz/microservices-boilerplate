@@ -2,12 +2,9 @@ package serviceA
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	uuid "github.com/satori/go.uuid"
-
-	"gorm.io/gorm"
 
 	"microservices-boilerplate/internal/serviceA/domain"
 )
@@ -24,10 +21,6 @@ var (
 	InvalidIDString = "15664c2f"
 
 	Ctx = context.Background()
-
-	ErrGeneric      = errors.New("generic error")
-	ErrNotFound     = gorm.ErrRecordNotFound
-	ErrCreatingUUID = errors.New("failed to create UUID from string")
 )
 
 func NewItemWithID(id string) *domain.ItemA {

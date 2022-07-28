@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"microservices-boilerplate/internal/serviceA/service"
+	assertionErrors "microservices-boilerplate/internal/test/assertion/errors"
 	assertion "microservices-boilerplate/internal/test/assertion/serviceA"
 	pkgMock "microservices-boilerplate/internal/test/mocks/pkg"
 	repositoryMock "microservices-boilerplate/internal/test/mocks/serviceA/repository"
@@ -61,15 +62,15 @@ var _ = Describe("Service", func() {
 			When("Request fails", func() {
 				It("Should return an error", func() {
 					repoMock.On("GetAll", assertion.Ctx).
-						Return(nil, assertion.ErrGeneric).
+						Return(nil, assertionErrors.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.ErrGeneric).
+					logMock.On("Error", mock.Anything, assertionErrors.ErrGeneric).
 						Once()
 
 					resp, err := s.GetAll(assertion.Ctx)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrGeneric))
+					Expect(err).To(Equal(assertionErrors.ErrGeneric))
 					Expect(resp).To(BeNil())
 				})
 			})
@@ -93,15 +94,15 @@ var _ = Describe("Service", func() {
 			When("Item is not found", func() {
 				It("Should return a not found error", func() {
 					repoMock.On("GetByID", assertion.Ctx, assertion.SampleID).
-						Return(nil, assertion.ErrNotFound).
+						Return(nil, assertionErrors.ErrNotFound).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.SampleID, assertion.ErrNotFound).
+					logMock.On("Error", mock.Anything, assertion.SampleID, assertionErrors.ErrNotFound).
 						Once()
 
 					resp, err := s.GetOneByID(assertion.Ctx, assertion.SampleID.String())
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrNotFound))
+					Expect(err).To(Equal(assertionErrors.ErrNotFound))
 					Expect(resp).To(BeNil())
 				})
 			})
@@ -116,7 +117,7 @@ var _ = Describe("Service", func() {
 					resp, err := s.GetOneByID(assertion.Ctx, assertion.InvalidIDString)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrCreatingUUID))
+					Expect(err).To(Equal(assertionErrors.ErrCreatingUUID))
 					Expect(resp).To(BeNil())
 				})
 			})
@@ -142,16 +143,16 @@ var _ = Describe("Service", func() {
 				It("Should return an error", func() {
 					itemInput := assertion.NewItemWithoutID()
 					repoMock.On("Insert", assertion.Ctx, itemInput).
-						Return(nil, assertion.ErrGeneric).
+						Return(nil, assertionErrors.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, itemInput, assertion.ErrGeneric).
+					logMock.On("Error", mock.Anything, itemInput, assertionErrors.ErrGeneric).
 						Return().
 						Once()
 
 					resp, err := s.Create(assertion.Ctx, itemInput)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrGeneric))
+					Expect(err).To(Equal(assertionErrors.ErrGeneric))
 					Expect(resp).To(BeNil())
 				})
 			})
@@ -175,15 +176,15 @@ var _ = Describe("Service", func() {
 					idString := assertion.SampleID.String()
 					inputItem := assertion.NewItemWithID(idString)
 					repoMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
-						Return(assertion.ErrGeneric).
+						Return(assertionErrors.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.SampleID, inputItem, assertion.ErrGeneric).
+					logMock.On("Error", mock.Anything, assertion.SampleID, inputItem, assertionErrors.ErrGeneric).
 						Return().
 						Once()
 
 					err := s.Update(assertion.Ctx, idString, inputItem)
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrGeneric))
+					Expect(err).To(Equal(assertionErrors.ErrGeneric))
 				})
 			})
 			When("Fails to parse UUID from string", func() {
@@ -199,7 +200,7 @@ var _ = Describe("Service", func() {
 					err := s.Update(assertion.Ctx, assertion.InvalidIDString, inputItem)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrCreatingUUID))
+					Expect(err).To(Equal(assertionErrors.ErrCreatingUUID))
 				})
 			})
 		})
@@ -218,15 +219,15 @@ var _ = Describe("Service", func() {
 			When("Request fails", func() {
 				It("Should return an error", func() {
 					repoMock.On("Remove", assertion.Ctx, assertion.SampleID).
-						Return(assertion.ErrGeneric).
+						Return(assertionErrors.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.SampleID, assertion.ErrGeneric).
+					logMock.On("Error", mock.Anything, assertion.SampleID, assertionErrors.ErrGeneric).
 						Return().
 						Once()
 
 					err := s.Delete(assertion.Ctx, assertion.SampleID.String())
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrGeneric))
+					Expect(err).To(Equal(assertionErrors.ErrGeneric))
 				})
 			})
 			When("Fails to parse UUID from string", func() {
@@ -240,7 +241,7 @@ var _ = Describe("Service", func() {
 					err := s.Delete(assertion.Ctx, assertion.InvalidIDString)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertion.ErrCreatingUUID))
+					Expect(err).To(Equal(assertionErrors.ErrCreatingUUID))
 				})
 			})
 		})
