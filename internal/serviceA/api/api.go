@@ -21,7 +21,10 @@ func New(h handler.Handler, mw middleware.Middleware) _api.Api {
 }
 
 func (a *api) RegisterRoutes(router *gin.Engine) {
+	router.Use(a.middleware.Cors())
+
 	apiGroup := router.Group("/api")
+
 	vGroup := apiGroup.Group("/v1")
 
 	vGroup.GET("/item", a.handler.Get)
