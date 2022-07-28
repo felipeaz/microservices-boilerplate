@@ -19,9 +19,17 @@ func TestService(t *testing.T) {
 }
 
 var _ = Describe("Service", func() {
-	logMock := new(pkgMock.Logger)
-	repoMock := new(repositoryMock.Repository)
-	s := service.New(logMock, repoMock)
+	var (
+		logMock  *pkgMock.Logger
+		repoMock *repositoryMock.Repository
+		s        service.Service
+	)
+
+	BeforeEach(func() {
+		logMock = pkgMock.NewLogger(GinkgoT())
+		repoMock = repositoryMock.NewRepository(GinkgoT())
+		s = service.New(logMock, repoMock)
+	})
 
 	Context("Testing CRUD Operations", func() {
 		Context("Getting All items", func() {

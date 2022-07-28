@@ -18,9 +18,17 @@ func TestService(t *testing.T) {
 }
 
 var _ = Describe("Repository", func() {
-	cacheMock := new(storageMock.Cache)
-	databaseMock := new(storageMock.Database)
-	repo := repository.New(databaseMock, cacheMock)
+	var (
+		cacheMock    *storageMock.Cache
+		databaseMock *storageMock.Database
+		repo         repository.Repository
+	)
+
+	BeforeEach(func() {
+		cacheMock = storageMock.NewCache(GinkgoT())
+		databaseMock = storageMock.NewDatabase(GinkgoT())
+		repo = repository.New(databaseMock, cacheMock)
+	})
 
 	Context("Testing CRUD operations", func() {
 		Context("Getting all items", func() {
