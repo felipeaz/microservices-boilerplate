@@ -6,11 +6,13 @@ still running independently.
 
 ## Dependencies Packages
 
-### Mocks
+### Tests
 #### Ginkgo: Test Framework
 Ref: https://github.com/onsi/ginkgo/v2
 #### Gomega: Assertion
 Ref: https://github.com/onsi/gomega
+
+### Mocks
 #### Testify: Mocks implementation
 Ref: https://github.com/stretchr/testify
 #### Vektra Mockery: Mocks Generator
