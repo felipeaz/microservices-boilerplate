@@ -25,8 +25,8 @@ func main() {
 					repository.New(cfg.Database, cfg.Cache),
 				),
 			),
-			middleware.New(),
 		),
+		middleware.New(),
 	)
 	apiServer.Run(cfg.Port)
 }

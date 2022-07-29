@@ -4,7 +4,6 @@ Microservices boilerplate built using Hexagonal architecture, DDD principles &am
 It was built in a Monorepo structure where all the services are part of a big repository, even though they're 
 still running independently.
 
-
 ## Dependencies Packages
 
 ### Mocks
@@ -28,3 +27,7 @@ Ref: https://github.com/gomodule/redigo/redis
 ### UUID
 #### Secure ID generator
 Ref: https://github.com/satori/go.uuid
+
+### Cors Middleware
+#### enabling API to external origins
+Ref: https://github.com/itsjamie/gin-cors
