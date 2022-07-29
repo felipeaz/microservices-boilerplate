@@ -29,5 +29,5 @@ Ref: https://github.com/gomodule/redigo/redis
 Ref: https://github.com/satori/go.uuid
 
 ### Cors Middleware
-#### enabling API to external origins
+#### Enable API to external origins
 Ref: https://github.com/itsjamie/gin-cors
