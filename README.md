@@ -33,3 +33,11 @@ Ref: https://github.com/satori/go.uuid
 ### Cors Middleware
 #### Enable API to external origins
 Ref: https://github.com/itsjamie/gin-cors
+
+### API Documentation
+#### Gin-Swagger: Swagger API Definitions
+Ref: https://github.com/swaggo/gin-swagger
+#### Swaggo Files: Doc files manager
+Ref: https://github.com/swaggo/files
+#### Swaggo: Doc Generator
+Ref: https://github.com/swaggo/swag/cmd/swag
