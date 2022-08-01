@@ -1,9 +1,0 @@
-basePath: /api/v1
-host: localhost:8085
-info:
-  contact: {}
-  description: This is a sample server.
-  title: Service A Swagger Example API
-  version: "1.0"
-paths: {}
-swagger: "2.0"

@@ -30,7 +30,7 @@ func New(service service.Service) *Handler {
 // @Produce     json
 // @Success     200 {array}  domain.ItemA
 // @Failure     500 {object} http.ResponseError
-// @Router      /items [get]
+// @Router      /a-items [get]
 func (h *Handler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 	resp, err := h.service.GetAll(ctx)
@@ -54,7 +54,7 @@ func (h *Handler) Get(c *gin.Context) {
 // @Failure     400    {object} http.ResponseError
 // @Failure     404    {object} http.ResponseError
 // @Failure     500    {object} http.ResponseError
-// @Router      /items/{id} [get]
+// @Router      /a-items/{id} [get]
 func (h *Handler) Find(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
@@ -77,7 +77,7 @@ func (h *Handler) Find(c *gin.Context) {
 // @Success     200 {object} domain.ItemA
 // @Failure     400 {object} http.ResponseError
 // @Failure     500 {object} http.ResponseError
-// @Router      /items [post]
+// @Router      /a-items [post]
 func (h *Handler) Create(c *gin.Context) {
 	var input *domain.ItemA
 	err := c.ShouldBindJSON(&input)
@@ -108,7 +108,7 @@ func (h *Handler) Create(c *gin.Context) {
 // @Failure     400 {object} http.ResponseError
 // @Failure     404 {object} http.ResponseError
 // @Failure     500 {object} http.ResponseError
-// @Router      /items/{id} [put]
+// @Router      /a-items/{id} [put]
 func (h *Handler) Update(c *gin.Context) {
 	var input *domain.ItemA
 	err := c.ShouldBindJSON(&input)
@@ -139,7 +139,7 @@ func (h *Handler) Update(c *gin.Context) {
 // @Failure     400    {object} http.ResponseError
 // @Failure     404    {object} http.ResponseError
 // @Failure     500    {object} http.ResponseError
-// @Router      /items/{id} [delete]
+// @Router      /a-items/{id} [delete]
 func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")

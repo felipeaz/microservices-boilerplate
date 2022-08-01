@@ -9,13 +9,6 @@ import (
 	"microservices-boilerplate/internal/serviceA/handler"
 )
 
-// @title       Service A Swagger Example API
-// @version     1.0
-// @description This is a sample server.
-
-// @host     localhost:8085
-// @BasePath /api/v1
-
 type api struct {
 	handler *handler.Handler
 	router  *gin.Engine
@@ -34,11 +27,11 @@ func (a *api) RegisterRoutes() {
 	{
 		vGroup := apiGroup.Group("/v1")
 		{
-			vGroup.GET("/items", a.handler.Get)
-			vGroup.GET("/items/:id", a.handler.Find)
-			vGroup.POST("/items", a.handler.Create)
-			vGroup.PUT("/items/:id", a.handler.Update)
-			vGroup.DELETE("/items/:id", a.handler.Delete)
+			vGroup.GET("/a-items", a.handler.Get)
+			vGroup.GET("/a-items/:id", a.handler.Find)
+			vGroup.POST("/a-items", a.handler.Create)
+			vGroup.PUT("/a-items/:id", a.handler.Update)
+			vGroup.DELETE("/a-items/:id", a.handler.Delete)
 		}
 	}
 }
