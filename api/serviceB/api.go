@@ -17,11 +17,11 @@ import (
 // @BasePath /api/v1
 
 type api struct {
-	handler handler.Handler
+	handler *handler.Handler
 	router  *gin.Engine
 }
 
-func NewApi(h handler.Handler, router *gin.Engine) Api {
+func NewApi(h *handler.Handler, router *gin.Engine) Api {
 	return &api{
 		handler: h,
 		router:  router,

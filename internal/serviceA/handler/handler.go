@@ -15,8 +15,8 @@ type Handler struct {
 	httpError httpService.Error
 }
 
-func New(service service.Service) Handler {
-	return Handler{
+func New(service service.Service) *Handler {
+	return &Handler{
 		service:   service,
 		httpError: httpService.NewHttpError(),
 	}
