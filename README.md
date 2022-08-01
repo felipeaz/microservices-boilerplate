@@ -4,6 +4,31 @@ Microservices boilerplate built using Hexagonal architecture, DDD principles &am
 It was built in a Monorepo structure where all the services are part of a big repository, even though they're 
 still running independently.
 
+## Application Guide
+This project has been automated with Makefile to simplify the configuration and how to run the services. To execute the
+functions bellow, it's required that you CD at the project root folder -> `microservices-boilerplate`.
+
+### Installation
+The application depends on `Kong API Gateway` to manage the microservices. It's important to configure everything
+before executing the API itself. Spoiler: Kong will take care of the service discovery, defining routes and set a JWT  
+authentication method.
+
+To install and configure the app, run `make install`.
+
+### Running API
+This command will start the API by executing the docker-compose files. Make sure you have installed the application
+before executing the running step.
+
+To execute the app, run `make run`.
+
+You can run `make stop` to stop the application and shut down the docker containers.
+
+### Running Tests
+This command executes all test cases in coverage mode and generates an HTML page with the output. The files generated 
+with this command will be at `test/coverage`.
+
+Run `make tests` to execute all tests.
+
 ## Dependencies Packages
 
 ### Tests
