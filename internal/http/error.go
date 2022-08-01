@@ -6,13 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type ResponseError struct {
-	StatusCode int
-	Error      error
-}
-
 type Error interface {
-	GetHttpResponseError(err error) ResponseError
+	GetStatusCodeFromError(err error) int
 }
 
 func NewHttpError() Error {
@@ -26,14 +21,7 @@ type httpError struct {
 	errorMessageMap map[int]string
 }
 
-func (h *httpError) GetHttpResponseError(err error) ResponseError {
-	return ResponseError{
-		StatusCode: h.getStatusCodeFromError(err),
-		Error:      err,
-	}
-}
-
-func (h *httpError) getStatusCodeFromError(err error) int {
+func (h *httpError) GetStatusCodeFromError(err error) int {
 	status, ok := h.errorStatusMap[err]
 	if !ok {
 		return http.StatusInternalServerError

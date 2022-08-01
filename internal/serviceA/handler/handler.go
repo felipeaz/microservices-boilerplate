@@ -29,14 +29,13 @@ func New(service service.Service) *Handler {
 // @Accept      json
 // @Produce     json
 // @Success     200 {array}  domain.ItemA
-// @Failure     500 {object} http.ResponseError
+// @Failure     500   {object} error
 // @Router      /a-items [get]
 func (h *Handler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 	resp, err := h.service.GetAll(ctx)
 	if err != nil {
-		httpErr := h.httpError.GetHttpResponseError(err)
-		c.JSON(httpErr.StatusCode, httpErr.Error)
+		c.JSON(h.httpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -49,19 +48,18 @@ func (h *Handler) Get(c *gin.Context) {
 // @Tags        itemA
 // @Accept      json
 // @Produce     json
-// @Param       string path     string true "Item ID"
-// @Success     200    {object} domain.ItemA
-// @Failure     400    {object} http.ResponseError
-// @Failure     404    {object} http.ResponseError
-// @Failure     500    {object} http.ResponseError
+// @Param       id  path     string true "Item ID"
+// @Success     200   {object} domain.ItemA
+// @Failure     400   {object} error
+// @Failure     404 {object} error
+// @Failure     500 {object} error
 // @Router      /a-items/{id} [get]
 func (h *Handler) Find(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
 	resp, err := h.service.GetOneByID(ctx, id)
 	if err != nil {
-		httpErr := h.httpError.GetHttpResponseError(err)
-		c.JSON(httpErr.StatusCode, httpErr.Error)
+		h.httpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -74,9 +72,10 @@ func (h *Handler) Find(c *gin.Context) {
 // @Tags        itemA
 // @Accept      json
 // @Produce     json
+// @Param       itemA body     domain.ItemA true "Item Properties"
 // @Success     200 {object} domain.ItemA
-// @Failure     400 {object} http.ResponseError
-// @Failure     500 {object} http.ResponseError
+// @Failure     400 {object} error
+// @Failure     500 {object} error
 // @Router      /a-items [post]
 func (h *Handler) Create(c *gin.Context) {
 	var input *domain.ItemA
@@ -89,8 +88,7 @@ func (h *Handler) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 	obj, err := h.service.Create(ctx, input)
 	if err != nil {
-		httpErr := h.httpError.GetHttpResponseError(err)
-		c.JSON(httpErr.StatusCode, httpErr.Error)
+		h.httpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -103,11 +101,12 @@ func (h *Handler) Create(c *gin.Context) {
 // @Tags        itemA
 // @Accept      json
 // @Produce     json
-// @Param       string path string true "Item ID"
+// @Param       id    path string       true "Item ID"
+// @Param       itemA body domain.ItemA true "Item Properties"
 // @Success     200
-// @Failure     400 {object} http.ResponseError
-// @Failure     404 {object} http.ResponseError
-// @Failure     500 {object} http.ResponseError
+// @Failure     400 {object} error
+// @Failure     404 {object} error
+// @Failure     500 {object} error
 // @Router      /a-items/{id} [put]
 func (h *Handler) Update(c *gin.Context) {
 	var input *domain.ItemA
@@ -120,8 +119,7 @@ func (h *Handler) Update(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
 	if err = h.service.Update(ctx, id, input); err != nil {
-		httpErr := h.httpError.GetHttpResponseError(err)
-		c.JSON(httpErr.StatusCode, httpErr.Error)
+		h.httpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -136,16 +134,15 @@ func (h *Handler) Update(c *gin.Context) {
 // @Produce     json
 // @Param       string path     string true "Item ID"
 // @Success     200    {object} domain.ItemA
-// @Failure     400    {object} http.ResponseError
-// @Failure     404    {object} http.ResponseError
-// @Failure     500    {object} http.ResponseError
+// @Failure     400    {object} error
+// @Failure     404    {object} error
+// @Failure     500    {object} error
 // @Router      /a-items/{id} [delete]
 func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
 	if err := h.service.Delete(ctx, id); err != nil {
-		httpErr := h.httpError.GetHttpResponseError(err)
-		c.JSON(httpErr.StatusCode, httpErr.Error)
+		h.httpError.GetStatusCodeFromError(err)
 		return
 	}
 

@@ -10,12 +10,6 @@ definitions:
       id:
         type: string
     type: object
-  http.ResponseError:
-    properties:
-      error: {}
-      statusCode:
-        type: integer
-    type: object
 host: localhost:8085
 info:
   contact: {}
@@ -39,8 +33,7 @@ paths:
             type: array
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Show all items
       tags:
       - itemA
@@ -48,6 +41,13 @@ paths:
       consumes:
       - application/json
       description: creates an item with given data
+      parameters:
+      - description: Item Properties
+        in: body
+        name: itemA
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ItemA'
       produces:
       - application/json
       responses:
@@ -57,12 +57,10 @@ paths:
             $ref: '#/definitions/domain.ItemA'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Creates an item
       tags:
       - itemA
@@ -86,16 +84,13 @@ paths:
             $ref: '#/definitions/domain.ItemA'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Deletes an item
       tags:
       - itemA
@@ -106,7 +101,7 @@ paths:
       parameters:
       - description: Item ID
         in: path
-        name: string
+        name: id
         required: true
         type: string
       produces:
@@ -118,16 +113,13 @@ paths:
             $ref: '#/definitions/domain.ItemA'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Show an item
       tags:
       - itemA
@@ -138,9 +130,15 @@ paths:
       parameters:
       - description: Item ID
         in: path
-        name: string
+        name: id
         required: true
         type: string
+      - description: Item Properties
+        in: body
+        name: itemA
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ItemA'
       produces:
       - application/json
       responses:
@@ -148,16 +146,13 @@ paths:
           description: OK
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Updates an item
       tags:
       - itemA
@@ -177,8 +172,7 @@ paths:
             type: array
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Show all items
       tags:
       - itemB
@@ -186,6 +180,13 @@ paths:
       consumes:
       - application/json
       description: creates an item with given data
+      parameters:
+      - description: Item Properties
+        in: body
+        name: itemB
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ItemB'
       produces:
       - application/json
       responses:
@@ -195,16 +196,13 @@ paths:
             $ref: '#/definitions/domain.ItemB'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Creates an item
       tags:
       - itemB
@@ -228,16 +226,13 @@ paths:
             $ref: '#/definitions/domain.ItemB'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Deletes an item
       tags:
       - itemB
@@ -248,7 +243,7 @@ paths:
       parameters:
       - description: Item ID
         in: path
-        name: string
+        name: id
         required: true
         type: string
       produces:
@@ -260,16 +255,13 @@ paths:
             $ref: '#/definitions/domain.ItemB'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Show an item
       tags:
       - itemB
@@ -280,9 +272,15 @@ paths:
       parameters:
       - description: Item ID
         in: path
-        name: string
+        name: id
         required: true
         type: string
+      - description: Item Properties
+        in: body
+        name: itemB
+        required: true
+        schema:
+          $ref: '#/definitions/domain.ItemB'
       produces:
       - application/json
       responses:
@@ -290,16 +288,13 @@ paths:
           description: OK
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/http.ResponseError'
+          schema: {}
       summary: Updates an item
       tags:
       - itemB
