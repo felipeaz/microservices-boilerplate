@@ -29,16 +29,18 @@ func NewApi(h *handler.Handler, router *gin.Engine) Api {
 }
 
 func (a *api) RegisterRoutes() {
-	apiGroup := a.router.Group("/api")
-	vGroup := apiGroup.Group("/v1")
-
-	vGroup.GET("/items", a.handler.Get)
-	vGroup.GET("/items/:id", a.handler.Find)
-	vGroup.POST("/items", a.handler.Create)
-	vGroup.PUT("/items/:id", a.handler.Update)
-	vGroup.DELETE("/items/:id", a.handler.Delete)
-
 	a.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	apiGroup := a.router.Group("/api")
+	{
+		vGroup := apiGroup.Group("/v1")
+		{
+			vGroup.GET("/items", a.handler.Get)
+			vGroup.GET("/items/:id", a.handler.Find)
+			vGroup.POST("/items", a.handler.Create)
+			vGroup.PUT("/items/:id", a.handler.Update)
+			vGroup.DELETE("/items/:id", a.handler.Delete)
+		}
+	}
 }
 
 func (a *api) Run(port string) error {
