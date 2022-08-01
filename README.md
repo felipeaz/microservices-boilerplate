@@ -41,3 +41,6 @@ Ref: https://github.com/swaggo/gin-swagger
 Ref: https://github.com/swaggo/files
 #### Swaggo: Doc Generator
 Ref: https://github.com/swaggo/swag/cmd/swag
+
+## Application High Level Architecture
+![Microservices Boilerplate drawio (1)](https://user-images.githubusercontent.com/32846823/182005597-e9512985-27d9-45ce-b74f-6b0bd4e8f9f2.png)
