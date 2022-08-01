@@ -6,21 +6,34 @@ import (
 	"gorm.io/gorm"
 )
 
+type ResponseError struct {
+	StatusCode int
+	Error      error
+}
+
 type Error interface {
-	GetStatusCodeFromError(err error) int
+	GetHttpResponseError(err error) ResponseError
 }
 
 func NewHttpError() Error {
 	return &httpError{
-		errorStatusMap: buildErrorMap(),
+		errorStatusMap: buildStatusFromErrorMap(),
 	}
 }
 
 type httpError struct {
-	errorStatusMap map[error]int
+	errorStatusMap  map[error]int
+	errorMessageMap map[int]string
 }
 
-func (h *httpError) GetStatusCodeFromError(err error) int {
+func (h *httpError) GetHttpResponseError(err error) ResponseError {
+	return ResponseError{
+		StatusCode: h.getStatusCodeFromError(err),
+		Error:      err,
+	}
+}
+
+func (h *httpError) getStatusCodeFromError(err error) int {
 	status, ok := h.errorStatusMap[err]
 	if !ok {
 		return http.StatusInternalServerError
@@ -28,7 +41,7 @@ func (h *httpError) GetStatusCodeFromError(err error) int {
 	return status
 }
 
-func buildErrorMap() map[error]int {
+func buildStatusFromErrorMap() map[error]int {
 	return map[error]int{
 		gorm.ErrRecordNotFound:     http.StatusNotFound,
 		gorm.ErrPrimaryKeyRequired: http.StatusBadRequest,

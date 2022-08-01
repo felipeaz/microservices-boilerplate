@@ -29,23 +29,23 @@ var _ = Describe("Error", func() {
 	Context("Getting status code from error", func() {
 		When("A record is not found", func() {
 			It("Should return status not found", func() {
-				statusCode := httpError.GetStatusCodeFromError(gorm.ErrRecordNotFound)
+				err := httpError.GetHttpResponseError(gorm.ErrRecordNotFound)
 
-				Expect(statusCode).To(Equal(http.StatusNotFound))
+				Expect(err.StatusCode).To(Equal(http.StatusNotFound))
 			})
 		})
 		When("User sent request with missing required value", func() {
 			It("Should return status bad request", func() {
-				statusCode := httpError.GetStatusCodeFromError(gorm.ErrPrimaryKeyRequired)
+				err := httpError.GetHttpResponseError(gorm.ErrPrimaryKeyRequired)
 
-				Expect(statusCode).To(Equal(http.StatusBadRequest))
+				Expect(err.StatusCode).To(Equal(http.StatusBadRequest))
 			})
 		})
 		When("Error is not mapped", func() {
 			It("Should return status internal server error", func() {
-				statusCode := httpError.GetStatusCodeFromError(assertionErrors.ErrGeneric)
+				err := httpError.GetHttpResponseError(assertionErrors.ErrGeneric)
 
-				Expect(statusCode).To(Equal(http.StatusInternalServerError))
+				Expect(err.StatusCode).To(Equal(http.StatusInternalServerError))
 			})
 		})
 	})

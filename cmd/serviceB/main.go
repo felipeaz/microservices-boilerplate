@@ -15,13 +15,6 @@ import (
 	"microservices-boilerplate/internal/serviceB/service"
 )
 
-// @title           Service B Swagger Example API
-// @version         1.0
-// @description     This is a sample server.
-
-// @host      localhost:8086
-// @BasePath  /api/v1
-
 func main() {
 	cfg := config.Build(env.Build(), flags.Build())
 	router := gin.Default()
