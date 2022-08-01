@@ -23,14 +23,14 @@ func New(service service.Service) Handler {
 }
 
 // Get godoc
-// @Summary      Show all items
-// @Description  Return all stored items
-// @Tags         itemA
-// @Accept       json
-// @Produce      json
-// @Success      200  {array}  domain.ItemA
-// @Failure      500  {object} http.ResponseError
-// @Router       /items [get]
+// @Summary     Show all items
+// @Description Return all stored items
+// @Tags        itemA
+// @Accept      json
+// @Produce     json
+// @Success     200 {array}  domain.ItemA
+// @Failure     500 {object} http.ResponseError
+// @Router      /items [get]
 func (h Handler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 	resp, err := h.service.GetAll(ctx)
@@ -44,17 +44,17 @@ func (h Handler) Get(c *gin.Context) {
 }
 
 // Find godoc
-// @Summary      Show an item
-// @Description  get item by ID
-// @Tags         itemA
-// @Accept       json
-// @Produce      json
-// @Param        string   path      string  true  "Item ID"
-// @Success      200  {object}  domain.ItemA
-// @Failure      400  {object}  http.ResponseError
-// @Failure      404  {object}  http.ResponseError
-// @Failure      500  {object}  http.ResponseError
-// @Router       /items/{id} [get]
+// @Summary     Show an item
+// @Description get item by ID
+// @Tags        itemA
+// @Accept      json
+// @Produce     json
+// @Param       string path     string true "Item ID"
+// @Success     200    {object} domain.ItemA
+// @Failure     400    {object} http.ResponseError
+// @Failure     404    {object} http.ResponseError
+// @Failure     500    {object} http.ResponseError
+// @Router      /items/{id} [get]
 func (h Handler) Find(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
@@ -69,15 +69,15 @@ func (h Handler) Find(c *gin.Context) {
 }
 
 // Create godoc
-// @Summary      Creates an item
-// @Description  creates an item with given data
-// @Tags         itemA
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  domain.ItemA
-// @Failure      400  {object}  http.ResponseError
-// @Failure      500  {object}  http.ResponseError
-// @Router       /items [post]
+// @Summary     Creates an item
+// @Description creates an item with given data
+// @Tags        itemA
+// @Accept      json
+// @Produce     json
+// @Success     200 {object} domain.ItemA
+// @Failure     400 {object} http.ResponseError
+// @Failure     500 {object} http.ResponseError
+// @Router      /items [post]
 func (h Handler) Create(c *gin.Context) {
 	var input *domain.ItemA
 	err := c.ShouldBindJSON(&input)
@@ -98,17 +98,17 @@ func (h Handler) Create(c *gin.Context) {
 }
 
 // Update godoc
-// @Summary      Updates an item
-// @Description  Updates an item with given ID
-// @Tags         itemA
-// @Accept       json
-// @Produce      json
-// @Param        string   path      string  true  "Item ID"
-// @Success      200
-// @Failure      400  {object}  http.ResponseError
-// @Failure      404  {object}  http.ResponseError
-// @Failure      500  {object}  http.ResponseError
-// @Router       /items/{id} [put]
+// @Summary     Updates an item
+// @Description Updates an item with given ID
+// @Tags        itemA
+// @Accept      json
+// @Produce     json
+// @Param       string path string true "Item ID"
+// @Success     200
+// @Failure     400 {object} http.ResponseError
+// @Failure     404 {object} http.ResponseError
+// @Failure     500 {object} http.ResponseError
+// @Router      /items/{id} [put]
 func (h Handler) Update(c *gin.Context) {
 	var input *domain.ItemA
 	err := c.ShouldBindJSON(&input)
@@ -129,17 +129,17 @@ func (h Handler) Update(c *gin.Context) {
 }
 
 // Delete godoc
-// @Summary      Deletes an item
-// @Description  Deletes an item with given ID
-// @Tags         itemA
-// @Accept       json
-// @Produce      json
-// @Param        string   path      string  true  "Item ID"
-// @Success      200  {object}  domain.ItemA
-// @Failure      400  {object}  http.ResponseError
-// @Failure      404  {object}  http.ResponseError
-// @Failure      500  {object}  http.ResponseError
-// @Router       /items/{id} [delete]
+// @Summary     Deletes an item
+// @Description Deletes an item with given ID
+// @Tags        itemA
+// @Accept      json
+// @Produce     json
+// @Param       string path     string true "Item ID"
+// @Success     200    {object} domain.ItemA
+// @Failure     400    {object} http.ResponseError
+// @Failure     404    {object} http.ResponseError
+// @Failure     500    {object} http.ResponseError
+// @Router      /items/{id} [delete]
 func (h Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")

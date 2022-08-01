@@ -9,12 +9,12 @@ import (
 	"microservices-boilerplate/internal/serviceB/handler"
 )
 
-// @title           Service B Swagger Example API
-// @version         1.0
-// @description     This is a sample server.
+// @title       Service B Swagger Example API
+// @version     1.0
+// @description This is a sample server.
 
-// @host      localhost:8086
-// @BasePath  /api/v1
+// @host     localhost:8086
+// @BasePath /api/v1
 
 type api struct {
 	handler handler.Handler
