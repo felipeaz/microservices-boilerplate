@@ -24,7 +24,7 @@ func (m *middleware) Cors() gin.HandlerFunc {
 		RequestHeaders:  "Origin, Authorization, Content-Type",
 		ExposedHeaders:  "",
 		MaxAge:          50 * time.Second,
-		Credentials:     true,
+		Credentials:     false,
 		ValidateHeaders: false,
 	})
 }

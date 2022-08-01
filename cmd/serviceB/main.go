@@ -5,6 +5,7 @@ import (
 
 	"microservices-boilerplate/api/middleware"
 	"microservices-boilerplate/api/serviceB"
+	_ "microservices-boilerplate/api/serviceB/docs"
 	"microservices-boilerplate/build/config"
 	"microservices-boilerplate/build/env"
 	"microservices-boilerplate/build/flags"
@@ -13,6 +14,13 @@ import (
 	"microservices-boilerplate/internal/serviceB/repository"
 	"microservices-boilerplate/internal/serviceB/service"
 )
+
+// @title           Service B Swagger Example API
+// @version         1.0
+// @description     This is a sample server.
+
+// @host      localhost:8086
+// @BasePath  /api/v1
 
 func main() {
 	cfg := config.Build(env.Build(), flags.Build())
