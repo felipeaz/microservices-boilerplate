@@ -31,7 +31,7 @@ func (r *redis) connect() redigo.Conn {
 
 func (r *redis) Set(key string, value interface{}) error {
 	conn := r.connect()
-	defer conn.Close()
+	defer r.closeConnection(conn)
 
 	_, err := conn.Do("SET", key, value)
 	if err != nil {
@@ -42,7 +42,7 @@ func (r *redis) Set(key string, value interface{}) error {
 
 func (r *redis) Get(key string) ([]byte, error) {
 	conn := r.connect()
-	defer conn.Close()
+	defer r.closeConnection(conn)
 
 	data, err := redigo.Bytes(conn.Do("GET", key))
 	if err != nil {
@@ -53,7 +53,7 @@ func (r *redis) Get(key string) ([]byte, error) {
 
 func (r *redis) Remove(key string) error {
 	conn := r.connect()
-	defer conn.Close()
+	defer r.closeConnection(conn)
 
 	_, err := conn.Do("DEL", key)
 	if err != nil {
@@ -64,4 +64,9 @@ func (r *redis) Remove(key string) error {
 
 func (r *redis) getHost() string {
 	return fmt.Sprintf("%s:%s", r.addr, r.port)
+}
+
+func (r *redis) closeConnection(conn redigo.Conn) {
+	err := conn.Close()
+	log.Println("failed to close connection:", err)
 }

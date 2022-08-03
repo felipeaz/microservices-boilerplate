@@ -47,37 +47,37 @@ func (p *postgresql) connect() (*gorm.DB, *sql.DB) {
 
 func (p *postgresql) Create(obj interface{}) error {
 	conn, db := p.connect()
-	defer db.Close()
+	defer p.closeConnection(db)
 	return conn.Create(obj).Error
 }
 
 func (p *postgresql) Update(id uuid.UUID, obj interface{}) error {
 	conn, db := p.connect()
-	defer db.Close()
+	defer p.closeConnection(db)
 	return conn.Where("id = ?", id).Updates(obj).Error
 }
 
 func (p *postgresql) Set(obj interface{}, field string, value interface{}) error {
 	conn, db := p.connect()
-	defer db.Close()
+	defer p.closeConnection(db)
 	return conn.Model(obj).UpdateColumn(field, value).Error
 }
 
 func (p *postgresql) Select(obj interface{}) error {
 	conn, db := p.connect()
-	defer db.Close()
+	defer p.closeConnection(db)
 	return conn.Find(obj).Error
 }
 
 func (p *postgresql) Raw(query string, obj interface{}) error {
 	conn, db := p.connect()
-	defer db.Close()
+	defer p.closeConnection(db)
 	return conn.Raw(query).Scan(obj).Error
 }
 
 func (p *postgresql) Delete(id uuid.UUID, obj interface{}) error {
 	conn, db := p.connect()
-	defer db.Close()
+	defer p.closeConnection(db)
 	return conn.Where("id = ?", id).Delete(obj).Error
 }
 
@@ -86,4 +86,10 @@ func (p *postgresql) getDBInfo() string {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=UTC",
 		p.host, p.port, p.username, p.password, p.dbName,
 	)
+}
+
+func (p *postgresql) closeConnection(db *sql.DB) {
+	if err := db.Close(); err != nil {
+		log.Println("failed to close sql db connection", err)
+	}
 }
