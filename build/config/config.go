@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"microservices-boilerplate/build/env"
 	"microservices-boilerplate/build/flags"
 	"microservices-boilerplate/internal/pkg"
@@ -21,6 +23,6 @@ func Build(env env.Env, flags flags.Flags) Config {
 		Port:     env.Port,
 		Database: postgresql.New(env.DBHost, env.DBPort, env.DBUsername, env.DBPassword, env.DBName),
 		Cache:    redis.New(env.CacheHost, env.CachePort),
-		Logger:   pkg.NewLogger(*flags.Debug),
+		Logger:   pkg.NewLogger(time.Now(), *flags.Debug),
 	}
 }

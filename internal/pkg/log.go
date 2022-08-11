@@ -1,8 +1,10 @@
 package pkg
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 const (
@@ -10,7 +12,7 @@ const (
 	warnPrefix  = "[WARNING]"
 	errPrefix   = "[ERROR]"
 	debugPrefix = "[DEBUG]"
-	logPath     = "logs.txt"
+	dirPrefix   = "logs"
 )
 
 // Logger interface abstracts the log package and offers an interface with three kind of log
@@ -22,7 +24,8 @@ type Logger interface {
 }
 
 // NewLogger returns an implementation of Logger
-func NewLogger(debugMode bool) Logger {
+func NewLogger(date time.Time, debugMode bool) Logger {
+	logPath, err := initializeLogPath(date)
 	lf, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal("unable to initialize log file", logPath, err)
@@ -30,7 +33,7 @@ func NewLogger(debugMode bool) Logger {
 	l := logger{
 		info: log.New(os.Stdout, infoPrefix, log.LstdFlags|log.Lshortfile),
 		warn: log.New(os.Stdout, warnPrefix, log.LstdFlags|log.Lshortfile),
-		err:  log.New(lf, errPrefix, log.LstdFlags|log.Llongfile),
+		err:  log.New(lf, errPrefix, log.LstdFlags|log.Lshortfile),
 	}
 	if debugMode {
 		l.debug = log.New(os.Stdout, debugPrefix, log.LstdFlags|log.Lshortfile)
@@ -62,4 +65,19 @@ func (l logger) Debug(v ...interface{}) {
 	if l.debug != nil {
 		l.debug.Println(v...)
 	}
+}
+
+func initializeLogPath(date time.Time) (string, error) {
+	logDir := GetLogPath()
+	err := os.MkdirAll(logDir, os.ModePerm)
+	if err != nil {
+		return "", err
+	}
+	fileName := date.Format("01-02-2006")
+	logFile := fmt.Sprintf("%s/%s.txt", logDir, fileName)
+	return logFile, nil
+}
+
+func GetLogPath() string {
+	return fmt.Sprintf("%s/%s", GetProjectRootDirectory(), dirPrefix)
 }
