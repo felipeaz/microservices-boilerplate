@@ -1,10 +1,12 @@
-package pkg
+package log
 
 import (
 	"fmt"
 	"log"
 	"os"
 	"time"
+
+	"microservices-boilerplate/internal/pkg/dir"
 )
 
 const (
@@ -68,7 +70,7 @@ func (l logger) Debug(v ...interface{}) {
 }
 
 func GetLogPath() string {
-	return fmt.Sprintf("%s/%s", GetProjectRootDirectory(), dirPrefix)
+	return fmt.Sprintf("%s/%s", dir.GetProjectRootDirectory(), dirPrefix)
 }
 
 func initializeLogPath(date time.Time) (string, error) {

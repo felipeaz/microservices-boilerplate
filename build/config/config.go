@@ -5,7 +5,7 @@ import (
 
 	"microservices-boilerplate/build/env"
 	"microservices-boilerplate/build/flags"
-	"microservices-boilerplate/internal/pkg"
+	"microservices-boilerplate/internal/pkg/log"
 	"microservices-boilerplate/internal/storage"
 	"microservices-boilerplate/third_party/postgresql"
 	"microservices-boilerplate/third_party/redis"
@@ -15,7 +15,7 @@ type Config struct {
 	Port     string
 	Database storage.Database
 	Cache    storage.Cache
-	Logger   pkg.Logger
+	Logger   log.Logger
 }
 
 func Build(env env.Env, flags flags.Flags) Config {
@@ -23,6 +23,6 @@ func Build(env env.Env, flags flags.Flags) Config {
 		Port:     env.Port,
 		Database: postgresql.New(env.DBHost, env.DBPort, env.DBUsername, env.DBPassword, env.DBName),
 		Cache:    redis.New(env.CacheHost, env.CachePort),
-		Logger:   pkg.NewLogger(time.Now(), *flags.Debug),
+		Logger:   log.NewLogger(time.Now(), *flags.Debug),
 	}
 }

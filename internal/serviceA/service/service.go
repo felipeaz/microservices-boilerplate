@@ -6,7 +6,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 
 	"microservices-boilerplate/internal/constants"
-	"microservices-boilerplate/internal/pkg"
+	"microservices-boilerplate/internal/pkg/log"
 	"microservices-boilerplate/internal/serviceA/domain"
 	"microservices-boilerplate/internal/serviceA/repository"
 )
@@ -19,7 +19,7 @@ type Service interface {
 	Delete(ctx context.Context, id string) error
 }
 
-func New(log pkg.Logger, repo repository.Repository) Service {
+func New(log log.Logger, repo repository.Repository) Service {
 	return &service{
 		log:        log,
 		repository: repo,
@@ -27,7 +27,7 @@ func New(log pkg.Logger, repo repository.Repository) Service {
 }
 
 type service struct {
-	log        pkg.Logger
+	log        log.Logger
 	repository repository.Repository
 }
 

@@ -1,4 +1,4 @@
-package pkg
+package dir
 
 import (
 	"os"
@@ -8,5 +8,5 @@ import (
 
 func GetProjectRootDirectory() string {
 	currDir, _ := os.Getwd()
-	return filepath.Dir(filepath.Dir(currDir))
+	return filepath.Dir(filepath.Dir(filepath.Dir(currDir)))
 }

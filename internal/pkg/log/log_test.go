@@ -1,6 +1,7 @@
-package pkg_test
+package log
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -8,62 +9,62 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"microservices-boilerplate/internal/pkg"
 	assertion "microservices-boilerplate/internal/test/assertion/pkg"
 )
 
 func TestLog(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Service Suits")
+	RunSpecs(t, "Log Suits")
 }
 
 var _ = Describe("Log", func() {
+	logFile := fmt.Sprintf("%s/%s", GetLogPath(), assertion.LogFile)
 	Context("Generating application logs", func() {
 		Context("When Debug is disabled", func() {
-			logger := pkg.NewLogger(assertion.LogTime, false)
+			logger := NewLogger(assertion.LogTime, false)
 			When("Logging Info type", func() {
 				It("Should call info.Println", func() {
 					logger.Info(assertion.InfoLogMessage)
 
-					Expect(assertion.LogFile).To(BeAnExistingFile())
+					Expect(logFile).To(BeAnExistingFile())
 				})
 			})
 			When("Logging Warn type", func() {
 				It("Should call warn.Println", func() {
 					logger.Warn(assertion.WarnLogMessage)
 
-					Expect(assertion.LogFile).To(BeAnExistingFile())
+					Expect(logFile).To(BeAnExistingFile())
 				})
 			})
 			When("Logging Error type", func() {
 				It("Should call info.Println", func() {
 					logger.Error(assertion.ErrLogMessage)
 
-					Expect(assertion.LogFile).To(BeAnExistingFile())
+					Expect(logFile).To(BeAnExistingFile())
 				})
 			})
 			When("Logging Debug type", func() {
 				It("Should not call debug.Println", func() {
 					logger.Debug(assertion.DebugLogMessage)
 
-					Expect(assertion.LogFile).To(BeAnExistingFile())
+					Expect(logFile).To(BeAnExistingFile())
 				})
 			})
 		})
 		Context("When Debug is enabled", func() {
-			logger := pkg.NewLogger(assertion.LogTime, true)
+			logger := NewLogger(assertion.LogTime, true)
 			When("Logging Debug type", func() {
 				It("Should call debug.Println", func() {
 					logger.Debug(assertion.DebugLogMessage)
 
-					Expect(assertion.LogFile).To(BeAnExistingFile())
+					Expect(logFile).To(BeAnExistingFile())
 				})
 			})
 		})
 		Context("Getting Log Path", func() {
 			When("Requesting the log path", func() {
 				It("Should return t", func() {
-					path := pkg.GetLogPath()
+					path := GetLogPath()
 
 					dir := strings.Split(path, "/")
 					rootDir := dir[len(dir)-2]
@@ -78,7 +79,8 @@ var _ = Describe("Log", func() {
 })
 
 var _ = AfterSuite(func() {
-	err := os.Remove(assertion.LogFile)
+	logFile := fmt.Sprintf("%s/%s", GetLogPath(), assertion.LogFile)
+	err := os.Remove(logFile)
 
 	Expect(err).NotTo(HaveOccurred())
 })
