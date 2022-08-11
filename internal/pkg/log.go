@@ -67,6 +67,10 @@ func (l logger) Debug(v ...interface{}) {
 	}
 }
 
+func GetLogPath() string {
+	return fmt.Sprintf("%s/%s", GetProjectRootDirectory(), dirPrefix)
+}
+
 func initializeLogPath(date time.Time) (string, error) {
 	logDir := GetLogPath()
 	err := os.MkdirAll(logDir, os.ModePerm)
@@ -76,8 +80,4 @@ func initializeLogPath(date time.Time) (string, error) {
 	fileName := date.Format("01-02-2006")
 	logFile := fmt.Sprintf("%s/%s.txt", logDir, fileName)
 	return logFile, nil
-}
-
-func GetLogPath() string {
-	return fmt.Sprintf("%s/%s", GetProjectRootDirectory(), dirPrefix)
 }

@@ -15,4 +15,7 @@ var (
 
 	LogTime = time.Date(1997, 12, 31, 10, 00, 00, 00, time.UTC)
 	LogFile = fmt.Sprintf("%s/%s.txt", pkg.GetLogPath(), LogTime.Format("01-02-2006"))
+
+	RootDir = "microservices-boilerplate"
+	LogDir  = "logs"
 )
