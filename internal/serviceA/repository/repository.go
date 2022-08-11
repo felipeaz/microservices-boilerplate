@@ -43,7 +43,7 @@ func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 	}
 
 	var itemArr []*domain.ItemA
-	if err = r.database.Select(&itemArr); err != nil {
+	if err = r.database.Select(ctx, &itemArr); err != nil {
 		return nil, err
 	}
 
@@ -64,7 +64,7 @@ func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemA, 
 	}
 
 	item := &domain.ItemA{ID: id}
-	if err = r.database.Select(item); err != nil {
+	if err = r.database.Select(ctx, item); err != nil {
 		return nil, err
 	}
 
@@ -81,7 +81,7 @@ func (r *repository) Insert(ctx context.Context, item *domain.ItemA) (*domain.It
 		return nil, err
 	}
 
-	if err = r.database.Create(item); err != nil {
+	if err = r.database.Create(ctx, item); err != nil {
 		return nil, err
 	}
 
@@ -98,7 +98,7 @@ func (r *repository) Update(ctx context.Context, id uuid.UUID, item *domain.Item
 		return err
 	}
 
-	return r.database.Update(id, item)
+	return r.database.Update(ctx, id, item)
 }
 
 func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
@@ -111,5 +111,5 @@ func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
 		return err
 	}
 
-	return r.database.Delete(id, domain.ItemA{})
+	return r.database.Delete(ctx, id, domain.ItemA{})
 }

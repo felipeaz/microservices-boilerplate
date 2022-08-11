@@ -1,6 +1,7 @@
 package postgresql
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -45,40 +46,40 @@ func (p *postgresql) connect() (*gorm.DB, *sql.DB) {
 	return conn, db
 }
 
-func (p *postgresql) Create(obj interface{}) error {
+func (p *postgresql) Create(ctx context.Context, obj interface{}) error {
 	conn, db := p.connect()
 	defer p.closeConnection(db)
-	return conn.Create(obj).Error
+	return conn.WithContext(ctx).Create(obj).Error
 }
 
-func (p *postgresql) Update(id uuid.UUID, obj interface{}) error {
+func (p *postgresql) Update(ctx context.Context, id uuid.UUID, obj interface{}) error {
 	conn, db := p.connect()
 	defer p.closeConnection(db)
-	return conn.Where("id = ?", id).Updates(obj).Error
+	return conn.WithContext(ctx).Where("id = ?", id).Updates(obj).Error
 }
 
-func (p *postgresql) Set(obj interface{}, field string, value interface{}) error {
+func (p *postgresql) Set(ctx context.Context, obj interface{}, field string, value interface{}) error {
 	conn, db := p.connect()
 	defer p.closeConnection(db)
-	return conn.Model(obj).UpdateColumn(field, value).Error
+	return conn.WithContext(ctx).Model(obj).UpdateColumn(field, value).Error
 }
 
-func (p *postgresql) Select(obj interface{}) error {
+func (p *postgresql) Select(ctx context.Context, obj interface{}) error {
 	conn, db := p.connect()
 	defer p.closeConnection(db)
-	return conn.Find(obj).Error
+	return conn.WithContext(ctx).Find(obj).Error
 }
 
-func (p *postgresql) Raw(query string, obj interface{}) error {
+func (p *postgresql) Raw(ctx context.Context, query string, obj interface{}) error {
 	conn, db := p.connect()
 	defer p.closeConnection(db)
-	return conn.Raw(query).Scan(obj).Error
+	return conn.WithContext(ctx).Raw(query).Scan(obj).Error
 }
 
-func (p *postgresql) Delete(id uuid.UUID, obj interface{}) error {
+func (p *postgresql) Delete(ctx context.Context, id uuid.UUID, obj interface{}) error {
 	conn, db := p.connect()
 	defer p.closeConnection(db)
-	return conn.Where("id = ?", id).Delete(obj).Error
+	return conn.WithContext(ctx).Where("id = ?", id).Delete(obj).Error
 }
 
 func (p *postgresql) getDBInfo() string {

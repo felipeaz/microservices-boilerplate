@@ -69,7 +69,7 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", &emptyArr).
+						databaseMock.On("Select", assertion.Ctx, &emptyArr).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", repository.AllItemsKey, emptyArr).
@@ -87,7 +87,7 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", &emptyArr).
+						databaseMock.On("Select", assertion.Ctx, &emptyArr).
 							Return(assertionErrors.ErrGeneric).
 							Once()
 
@@ -104,7 +104,7 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", &emptyArr).
+						databaseMock.On("Select", assertion.Ctx, &emptyArr).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", repository.AllItemsKey, emptyArr).
@@ -161,7 +161,7 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", idString).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.NewItemWithID(idString)).
+						databaseMock.On("Select", assertion.Ctx, assertion.NewItemWithID(idString)).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", idString, expectedItem).
@@ -180,7 +180,7 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", idString).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.NewItemWithID(idString)).
+						databaseMock.On("Select", assertion.Ctx, assertion.NewItemWithID(idString)).
 							Return(assertionErrors.ErrGeneric).
 							Once()
 
@@ -198,7 +198,7 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", idString).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.NewItemWithID(idString)).
+						databaseMock.On("Select", assertion.Ctx, assertion.NewItemWithID(idString)).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", idString, expectedItem).
@@ -223,7 +223,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Create", inputItem).
+					databaseMock.On("Create", assertion.Ctx, inputItem).
 						Return(nil).
 						Once()
 
@@ -240,7 +240,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Create", inputItem).
+					databaseMock.On("Create", assertion.Ctx, inputItem).
 						Return(assertionErrors.ErrGeneric).
 						Once()
 
@@ -277,7 +277,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Update", assertion.SampleID, inputItem).
+					databaseMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
 						Return(nil).
 						Once()
 
@@ -295,7 +295,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Update", assertion.SampleID, inputItem).
+					databaseMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
 						Return(assertionErrors.ErrGeneric).
 						Once()
 
@@ -345,7 +345,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Delete", assertion.SampleID, domain.ItemA{}).
+					databaseMock.On("Delete", assertion.Ctx, assertion.SampleID, domain.ItemA{}).
 						Return(nil).
 						Once()
 
@@ -389,7 +389,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Delete", assertion.SampleID, domain.ItemA{}).
+					databaseMock.On("Delete", assertion.Ctx, assertion.SampleID, domain.ItemA{}).
 						Return(assertionErrors.ErrGeneric).
 						Once()
 
