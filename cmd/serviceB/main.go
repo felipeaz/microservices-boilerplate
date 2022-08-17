@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 
 	"microservices-boilerplate/api/middleware"
 	"microservices-boilerplate/api/serviceB"
@@ -24,6 +25,12 @@ import (
 // @BasePath /api/v1
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("recovered in main")
+		}
+	}()
+
 	cfg := config.Build(env.Build(), flags.Build())
 	router := gin.Default()
 	router.Use(middleware.New().Cors())
