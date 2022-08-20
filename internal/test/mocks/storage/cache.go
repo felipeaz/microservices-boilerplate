@@ -65,8 +65,7 @@ type mockConstructorTestingTNewCache interface {
 	Cleanup(func())
 }
 
-// NewCache creates a new instance of Cache. It also registers a testing interface on the mock and a cleanup function
-//to assert the mocks expectations.
+// NewCache creates a new instance of Cache. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 func NewCache(t mockConstructorTestingTNewCache) *Cache {
 	mock := &Cache{}
 	mock.Mock.Test(t)
