@@ -49,6 +49,7 @@ func main() {
 						),
 					},
 				),
+				Router: router,
 			},
 		),
 	).Run(cfg.Port)
