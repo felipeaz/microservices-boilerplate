@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"microservices-boilerplate/api/middleware"
-	"microservices-boilerplate/api/serviceB"
 	"microservices-boilerplate/build/config"
 	"microservices-boilerplate/build/env"
 	"microservices-boilerplate/build/flags"
@@ -35,26 +34,21 @@ func main() {
 	router := gin.Default()
 	router.Use(middleware.New().Cors())
 
-	api := server.New(
-		serviceB.NewApi(
-			handler.New(
-				&handler.Config{
-					Service: service.New(
-						&service.Config{
-							Log: cfg.Logger,
-							Repository: repository.New(
-								&repository.Config{
-									Database: cfg.Database,
-									Cache:    cfg.Cache,
-								},
-							),
-						},
-					),
-				},
-			),
-			router,
+	server.New(
+		handler.New(
+			&handler.Config{
+				Service: service.New(
+					&service.Config{
+						Log: cfg.Logger,
+						Repository: repository.New(
+							&repository.Config{
+								Database: cfg.Database,
+								Cache:    cfg.Cache,
+							},
+						),
+					},
+				),
+			},
 		),
-	)
-
-	api.Run(cfg.Port)
+	).Run(cfg.Port)
 }

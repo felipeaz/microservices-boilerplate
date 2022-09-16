@@ -21,7 +21,6 @@ type server struct {
 }
 
 func (s *server) Run(port string) {
-	s.api.RegisterRoutes()
 	err := s.api.Run(port)
 	if err != nil {
 		log.Fatal("failed to initialize server")

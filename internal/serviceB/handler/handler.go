@@ -13,6 +13,7 @@ import (
 type Config struct {
 	Service   service.Service
 	HttpError httpService.Error
+	Router    *gin.Engine
 }
 
 type Handler struct {
@@ -20,9 +21,11 @@ type Handler struct {
 }
 
 func New(config *Config) *Handler {
-	return &Handler{
+	handler := &Handler{
 		config: config,
 	}
+	handler.RegisterRoutes()
+	return handler
 }
 
 // Get godoc

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +13,7 @@ import (
 type Config struct {
 	Service   service.Service
 	HttpError httpService.Error
+	Router    *gin.Engine
 }
 
 type Handler struct {
@@ -21,9 +21,11 @@ type Handler struct {
 }
 
 func New(config *Config) *Handler {
-	return &Handler{
+	handler := &Handler{
 		config: config,
 	}
+	handler.RegisterRoutes()
+	return handler
 }
 
 // Get godoc
@@ -36,7 +38,6 @@ func New(config *Config) *Handler {
 // @Failure     500   {object} error
 // @Router      /a-items [get]
 func (h *Handler) Get(c *gin.Context) {
-	fmt.Println("heeeeeeelloo")
 	ctx := c.Request.Context()
 	resp, err := h.config.Service.GetAll(ctx)
 	if err != nil {
