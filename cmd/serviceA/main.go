@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/gin-gonic/gin"
+
 	"microservices-boilerplate/api/middleware"
 	"microservices-boilerplate/build/config"
 	"microservices-boilerplate/build/env"

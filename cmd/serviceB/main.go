@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
+
+	"github.com/gin-gonic/gin"
 
 	"microservices-boilerplate/api/middleware"
 	"microservices-boilerplate/build/config"
