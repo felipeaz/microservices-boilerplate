@@ -8,7 +8,8 @@ import (
 
 	"microservices-boilerplate/internal/serviceB/domain"
 	"microservices-boilerplate/internal/serviceB/repository"
-	assertionErrors "microservices-boilerplate/internal/test/assertion/errors"
+	commonAssertion "microservices-boilerplate/internal/test/assertion/common"
+	errorsAssertion "microservices-boilerplate/internal/test/assertion/errors"
 	assertion "microservices-boilerplate/internal/test/assertion/serviceB"
 	storageMock "microservices-boilerplate/internal/test/mocks/storage"
 )
@@ -47,7 +48,7 @@ var _ = Describe("Repository", func() {
 							Return(itemBrrInBytes, nil).
 							Once()
 
-						item, err := repo.GetAll(assertion.Ctx)
+						item, err := repo.GetAll(commonAssertion.EmptyCtx)
 
 						Expect(err).ShouldNot(HaveOccurred())
 						Expect(item).To(Equal(expectedItemArr))
@@ -56,13 +57,13 @@ var _ = Describe("Repository", func() {
 				When("Fails", func() {
 					It("Should return an error", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
-							Return(nil, assertionErrors.ErrGeneric).
+							Return(nil, errorsAssertion.ErrGeneric).
 							Once()
 
-						item, err := repo.GetAll(assertion.Ctx)
+						item, err := repo.GetAll(commonAssertion.EmptyCtx)
 
 						Expect(err).Should(HaveOccurred())
-						Expect(err).To(Equal(assertionErrors.ErrGeneric))
+						Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 						Expect(item).To(BeNil())
 					})
 				})
@@ -74,14 +75,14 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.Ctx, &emptyArr).
+						databaseMock.On("Select", commonAssertion.EmptyCtx, &emptyArr).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", repository.AllItemsKey, emptyArr).
 							Return(nil).
 							Once()
 
-						_, err := repo.GetAll(assertion.Ctx)
+						_, err := repo.GetAll(commonAssertion.EmptyCtx)
 
 						Expect(err).ShouldNot(HaveOccurred())
 					})
@@ -92,14 +93,14 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.Ctx, &emptyArr).
-							Return(assertionErrors.ErrGeneric).
+						databaseMock.On("Select", commonAssertion.EmptyCtx, &emptyArr).
+							Return(errorsAssertion.ErrGeneric).
 							Once()
 
-						item, err := repo.GetAll(assertion.Ctx)
+						item, err := repo.GetAll(commonAssertion.EmptyCtx)
 
 						Expect(err).Should(HaveOccurred())
-						Expect(err).To(Equal(assertionErrors.ErrGeneric))
+						Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 						Expect(item).To(BeNil())
 					})
 				})
@@ -109,17 +110,17 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", repository.AllItemsKey).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.Ctx, &emptyArr).
+						databaseMock.On("Select", commonAssertion.EmptyCtx, &emptyArr).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", repository.AllItemsKey, emptyArr).
-							Return(assertionErrors.ErrGeneric).
+							Return(errorsAssertion.ErrGeneric).
 							Once()
 
-						item, err := repo.GetAll(assertion.Ctx)
+						item, err := repo.GetAll(commonAssertion.EmptyCtx)
 
 						Expect(err).Should(HaveOccurred())
-						Expect(err).To(Equal(assertionErrors.ErrGeneric))
+						Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 						Expect(item).To(BeNil())
 					})
 				})
@@ -137,7 +138,7 @@ var _ = Describe("Repository", func() {
 							Return(itemInBytes, nil).
 							Once()
 
-						item, err := repo.GetByID(assertion.Ctx, assertion.SampleID)
+						item, err := repo.GetByID(commonAssertion.EmptyCtx, assertion.SampleID)
 
 						Expect(err).ShouldNot(HaveOccurred())
 						Expect(item).To(Equal(expectedItem))
@@ -147,13 +148,13 @@ var _ = Describe("Repository", func() {
 					It("Should return an error", func() {
 						idString := assertion.SampleID.String()
 						cacheMock.On("Get", idString).
-							Return(nil, assertionErrors.ErrGeneric).
+							Return(nil, errorsAssertion.ErrGeneric).
 							Once()
 
-						item, err := repo.GetByID(assertion.Ctx, assertion.SampleID)
+						item, err := repo.GetByID(commonAssertion.EmptyCtx, assertion.SampleID)
 
 						Expect(err).Should(HaveOccurred())
-						Expect(err).To(Equal(assertionErrors.ErrGeneric))
+						Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 						Expect(item).To(BeNil())
 					})
 				})
@@ -166,14 +167,14 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", idString).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.Ctx, assertion.NewItemWithID(idString)).
+						databaseMock.On("Select", commonAssertion.EmptyCtx, assertion.NewItemWithID(idString)).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", idString, expectedItem).
 							Return(nil).
 							Once()
 
-						item, err := repo.GetByID(assertion.Ctx, assertion.SampleID)
+						item, err := repo.GetByID(commonAssertion.EmptyCtx, assertion.SampleID)
 
 						Expect(err).ShouldNot(HaveOccurred())
 						Expect(item).To(Equal(expectedItem))
@@ -185,14 +186,14 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", idString).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.Ctx, assertion.NewItemWithID(idString)).
-							Return(assertionErrors.ErrGeneric).
+						databaseMock.On("Select", commonAssertion.EmptyCtx, assertion.NewItemWithID(idString)).
+							Return(errorsAssertion.ErrGeneric).
 							Once()
 
-						item, err := repo.GetByID(assertion.Ctx, assertion.SampleID)
+						item, err := repo.GetByID(commonAssertion.EmptyCtx, assertion.SampleID)
 
 						Expect(err).Should(HaveOccurred())
-						Expect(err).To(Equal(assertionErrors.ErrGeneric))
+						Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 						Expect(item).To(BeNil())
 					})
 				})
@@ -203,17 +204,17 @@ var _ = Describe("Repository", func() {
 						cacheMock.On("Get", idString).
 							Return(nil, nil).
 							Once()
-						databaseMock.On("Select", assertion.Ctx, assertion.NewItemWithID(idString)).
+						databaseMock.On("Select", commonAssertion.EmptyCtx, assertion.NewItemWithID(idString)).
 							Return(nil).
 							Once()
 						cacheMock.On("Set", idString, expectedItem).
-							Return(assertionErrors.ErrGeneric).
+							Return(errorsAssertion.ErrGeneric).
 							Once()
 
-						item, err := repo.GetByID(assertion.Ctx, assertion.SampleID)
+						item, err := repo.GetByID(commonAssertion.EmptyCtx, assertion.SampleID)
 
 						Expect(err).Should(HaveOccurred())
-						Expect(err).To(Equal(assertionErrors.ErrGeneric))
+						Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 						Expect(item).To(BeNil())
 					})
 				})
@@ -228,11 +229,11 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Create", assertion.Ctx, inputItem).
+					databaseMock.On("Create", commonAssertion.EmptyCtx, inputItem).
 						Return(nil).
 						Once()
 
-					item, err := repo.Insert(assertion.Ctx, inputItem)
+					item, err := repo.Insert(commonAssertion.EmptyCtx, inputItem)
 
 					Expect(err).ShouldNot(HaveOccurred())
 					Expect(item.ID).NotTo(BeNil())
@@ -245,14 +246,14 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Create", assertion.Ctx, inputItem).
-						Return(assertionErrors.ErrGeneric).
+					databaseMock.On("Create", commonAssertion.EmptyCtx, inputItem).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					item, err := repo.Insert(assertion.Ctx, inputItem)
+					item, err := repo.Insert(commonAssertion.EmptyCtx, inputItem)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 					Expect(item).To(BeNil())
 				})
 			})
@@ -260,13 +261,13 @@ var _ = Describe("Repository", func() {
 				It("Should return an error", func() {
 					inputItem := assertion.NewItemWithID(assertion.SampleID.String())
 					cacheMock.On("Remove", repository.AllItemsKey).
-						Return(assertionErrors.ErrGeneric).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					item, err := repo.Insert(assertion.Ctx, inputItem)
+					item, err := repo.Insert(commonAssertion.EmptyCtx, inputItem)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 					Expect(item).To(BeNil())
 				})
 			})
@@ -282,11 +283,11 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
+					databaseMock.On("Update", commonAssertion.EmptyCtx, assertion.SampleID, inputItem).
 						Return(nil).
 						Once()
 
-					err := repo.Update(assertion.Ctx, assertion.SampleID, inputItem)
+					err := repo.Update(commonAssertion.EmptyCtx, assertion.SampleID, inputItem)
 
 					Expect(err).ShouldNot(HaveOccurred())
 				})
@@ -300,27 +301,27 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Update", assertion.Ctx, assertion.SampleID, inputItem).
-						Return(assertionErrors.ErrGeneric).
+					databaseMock.On("Update", commonAssertion.EmptyCtx, assertion.SampleID, inputItem).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					err := repo.Update(assertion.Ctx, assertion.SampleID, inputItem)
+					err := repo.Update(commonAssertion.EmptyCtx, assertion.SampleID, inputItem)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 				})
 			})
 			When("Fail to remove cached item", func() {
 				It("Should return an error", func() {
 					inputItem := assertion.NewItemWithID(assertion.SampleID.String())
 					cacheMock.On("Remove", assertion.SampleID.String()).
-						Return(assertionErrors.ErrGeneric).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					err := repo.Update(assertion.Ctx, assertion.SampleID, inputItem)
+					err := repo.Update(commonAssertion.EmptyCtx, assertion.SampleID, inputItem)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 				})
 			})
 			When("Fail to remove all cached items", func() {
@@ -330,13 +331,13 @@ var _ = Describe("Repository", func() {
 						Return(nil).
 						Once()
 					cacheMock.On("Remove", repository.AllItemsKey).
-						Return(assertionErrors.ErrGeneric).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					err := repo.Update(assertion.Ctx, assertion.SampleID, inputItem)
+					err := repo.Update(commonAssertion.EmptyCtx, assertion.SampleID, inputItem)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 				})
 			})
 		})
@@ -350,11 +351,11 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Delete", assertion.Ctx, assertion.SampleID, domain.ItemB{}).
+					databaseMock.On("Delete", commonAssertion.EmptyCtx, assertion.SampleID, domain.ItemB{}).
 						Return(nil).
 						Once()
 
-					err := repo.Remove(assertion.Ctx, assertion.SampleID)
+					err := repo.Remove(commonAssertion.EmptyCtx, assertion.SampleID)
 
 					Expect(err).ShouldNot(HaveOccurred())
 				})
@@ -362,13 +363,13 @@ var _ = Describe("Repository", func() {
 			When("Fail to remove cached item", func() {
 				It("Should return an error", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
-						Return(assertionErrors.ErrGeneric).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					err := repo.Remove(assertion.Ctx, assertion.SampleID)
+					err := repo.Remove(commonAssertion.EmptyCtx, assertion.SampleID)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 				})
 			})
 			When("Fail to remove all cached items", func() {
@@ -377,13 +378,13 @@ var _ = Describe("Repository", func() {
 						Return(nil).
 						Once()
 					cacheMock.On("Remove", repository.AllItemsKey).
-						Return(assertionErrors.ErrGeneric).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					err := repo.Remove(assertion.Ctx, assertion.SampleID)
+					err := repo.Remove(commonAssertion.EmptyCtx, assertion.SampleID)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 				})
 			})
 			When("Fail to delete item from DB", func() {
@@ -394,14 +395,14 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", repository.AllItemsKey).
 						Return(nil).
 						Once()
-					databaseMock.On("Delete", assertion.Ctx, assertion.SampleID, domain.ItemB{}).
-						Return(assertionErrors.ErrGeneric).
+					databaseMock.On("Delete", commonAssertion.EmptyCtx, assertion.SampleID, domain.ItemB{}).
+						Return(errorsAssertion.ErrGeneric).
 						Once()
 
-					err := repo.Remove(assertion.Ctx, assertion.SampleID)
+					err := repo.Remove(commonAssertion.EmptyCtx, assertion.SampleID)
 
 					Expect(err).Should(HaveOccurred())
-					Expect(err).To(Equal(assertionErrors.ErrGeneric))
+					Expect(err).To(Equal(errorsAssertion.ErrGeneric))
 				})
 			})
 		})

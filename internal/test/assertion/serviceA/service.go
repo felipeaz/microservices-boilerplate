@@ -1,7 +1,6 @@
 package serviceA
 
 import (
-	"context"
 	"fmt"
 
 	uuid "github.com/satori/go.uuid"
@@ -19,8 +18,6 @@ var (
 
 	SampleID        = uuid.FromStringOrNil("15664c2f-d5bf-4922-8d19-39c6886bce90")
 	InvalidIDString = "15664c2f"
-
-	Ctx = context.Background()
 )
 
 func NewItemWithID(id string) *domain.ItemA {
