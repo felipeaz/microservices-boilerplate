@@ -40,8 +40,15 @@ func main() {
 			handler.New(
 				&handler.Config{
 					Service: service.New(
-						cfg.Logger,
-						repository.New(cfg.Database, cfg.Cache),
+						&service.Config{
+							Log: cfg.Logger,
+							Repository: repository.New(
+								&repository.Config{
+									Database: cfg.Database,
+									Cache:    cfg.Cache,
+								},
+							),
+						},
 					),
 				},
 			),

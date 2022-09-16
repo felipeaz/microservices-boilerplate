@@ -29,7 +29,12 @@ var _ = Describe("Service", func() {
 	BeforeEach(func() {
 		logMock = pkgMock.NewLogger(GinkgoT())
 		repoMock = repositoryMock.NewRepository(GinkgoT())
-		s = service.New(logMock, repoMock)
+		s = service.New(
+			&service.Config{
+				Log:        logMock,
+				Repository: repoMock,
+			},
+		)
 	})
 
 	Context("Testing CRUD Operations", func() {

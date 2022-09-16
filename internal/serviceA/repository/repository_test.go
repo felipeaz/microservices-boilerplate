@@ -28,7 +28,12 @@ var _ = Describe("Repository", func() {
 	BeforeEach(func() {
 		cacheMock = storageMock.NewCache(GinkgoT())
 		databaseMock = storageMock.NewDatabase(GinkgoT())
-		repo = repository.New(databaseMock, cacheMock)
+		repo = repository.New(
+			&repository.Config{
+				Database: databaseMock,
+				Cache:    cacheMock,
+			},
+		)
 	})
 
 	Context("Testing CRUD operations", func() {

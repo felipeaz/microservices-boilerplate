@@ -19,22 +19,25 @@ type Service interface {
 	Delete(ctx context.Context, id string) error
 }
 
-func New(log log.Logger, repo repository.Repository) Service {
+func New(config *Config) Service {
 	return &service{
-		log:        log,
-		repository: repo,
+		config: config,
 	}
 }
 
+type Config struct {
+	Log        log.Logger
+	Repository repository.Repository
+}
+
 type service struct {
-	log        log.Logger
-	repository repository.Repository
+	config *Config
 }
 
 func (s *service) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
-	resp, err := s.repository.GetAll(ctx)
+	resp, err := s.config.Repository.GetAll(ctx)
 	if err != nil {
-		s.log.Error("failed to get all item a", err)
+		s.config.Log.Error("failed to get all item a", err)
 		return nil, err
 	}
 
@@ -44,13 +47,13 @@ func (s *service) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemB, error) {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.log.Error("failed to parse id to UUID", err)
+		s.config.Log.Error("failed to parse id to UUID", err)
 		return nil, constants.ErrCreatingUUIDFromString
 	}
 
-	resp, err := s.repository.GetByID(ctx, itemID)
+	resp, err := s.config.Repository.GetByID(ctx, itemID)
 	if err != nil {
-		s.log.Error("failed to get item with id", itemID, err)
+		s.config.Log.Error("failed to get item with id", itemID, err)
 		return nil, err
 	}
 
@@ -58,9 +61,9 @@ func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemB, err
 }
 
 func (s *service) Create(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
-	resp, err := s.repository.Insert(ctx, item)
+	resp, err := s.config.Repository.Insert(ctx, item)
 	if err != nil {
-		s.log.Error("failed to create item", item, err)
+		s.config.Log.Error("failed to create item", item, err)
 		return nil, err
 	}
 
@@ -70,12 +73,12 @@ func (s *service) Create(ctx context.Context, item *domain.ItemB) (*domain.ItemB
 func (s *service) Update(ctx context.Context, id string, item *domain.ItemB) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.log.Error("failed to parse id to UUID", err)
+		s.config.Log.Error("failed to parse id to UUID", err)
 		return constants.ErrCreatingUUIDFromString
 	}
 
-	if err = s.repository.Update(ctx, itemID, item); err != nil {
-		s.log.Error("failed to update item", itemID, item, err)
+	if err = s.config.Repository.Update(ctx, itemID, item); err != nil {
+		s.config.Log.Error("failed to update item", itemID, item, err)
 		return err
 	}
 
@@ -85,12 +88,12 @@ func (s *service) Update(ctx context.Context, id string, item *domain.ItemB) err
 func (s *service) Delete(ctx context.Context, id string) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.log.Error("failed to parse id to UUID", err)
+		s.config.Log.Error("failed to parse id to UUID", err)
 		return constants.ErrCreatingUUIDFromString
 	}
 
-	if err = s.repository.Remove(ctx, itemID); err != nil {
-		s.log.Error("failed to delete item", itemID, err)
+	if err = s.config.Repository.Remove(ctx, itemID); err != nil {
+		s.config.Log.Error("failed to delete item", itemID, err)
 		return err
 	}
 

@@ -21,20 +21,23 @@ type Repository interface {
 	Remove(ctx context.Context, id uuid.UUID) error
 }
 
-func New(db storage.Database, cache storage.Cache) Repository {
+func New(config *Config) Repository {
 	return &repository{
-		database: db,
-		cache:    cache,
+		config: config,
 	}
 }
 
+type Config struct {
+	Database storage.Database
+	Cache    storage.Cache
+}
+
 type repository struct {
-	database storage.Database
-	cache    storage.Cache
+	config *Config
 }
 
 func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
-	cacheData, err := r.cache.Get(AllItemsKey)
+	cacheData, err := r.config.Cache.Get(AllItemsKey)
 	if err != nil {
 		return nil, err
 	}
@@ -43,11 +46,11 @@ func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 	}
 
 	var itemArr []*domain.ItemB
-	if err = r.database.Select(ctx, &itemArr); err != nil {
+	if err = r.config.Database.Select(ctx, &itemArr); err != nil {
 		return nil, err
 	}
 
-	if err = r.cache.Set(AllItemsKey, itemArr); err != nil {
+	if err = r.config.Cache.Set(AllItemsKey, itemArr); err != nil {
 		return nil, err
 	}
 
@@ -55,7 +58,7 @@ func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 }
 
 func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, error) {
-	cacheData, err := r.cache.Get(id.String())
+	cacheData, err := r.config.Cache.Get(id.String())
 	if err != nil {
 		return nil, err
 	}
@@ -64,11 +67,11 @@ func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, 
 	}
 
 	item := &domain.ItemB{ID: id}
-	if err = r.database.Select(ctx, item); err != nil {
+	if err = r.config.Database.Select(ctx, item); err != nil {
 		return nil, err
 	}
 
-	if err = r.cache.Set(id.String(), item); err != nil {
+	if err = r.config.Cache.Set(id.String(), item); err != nil {
 		return nil, err
 	}
 
@@ -76,12 +79,12 @@ func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemB, 
 }
 
 func (r *repository) Insert(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
-	err := r.cache.Remove(AllItemsKey)
+	err := r.config.Cache.Remove(AllItemsKey)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = r.database.Create(ctx, item); err != nil {
+	if err = r.config.Database.Create(ctx, item); err != nil {
 		return nil, err
 	}
 
@@ -89,27 +92,27 @@ func (r *repository) Insert(ctx context.Context, item *domain.ItemB) (*domain.It
 }
 
 func (r *repository) Update(ctx context.Context, id uuid.UUID, item *domain.ItemB) error {
-	err := r.cache.Remove(id.String())
+	err := r.config.Cache.Remove(id.String())
 	if err != nil {
 		return err
 	}
-	err = r.cache.Remove(AllItemsKey)
+	err = r.config.Cache.Remove(AllItemsKey)
 	if err != nil {
 		return err
 	}
 
-	return r.database.Update(ctx, id, item)
+	return r.config.Database.Update(ctx, id, item)
 }
 
 func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
-	err := r.cache.Remove(id.String())
+	err := r.config.Cache.Remove(id.String())
 	if err != nil {
 		return err
 	}
-	err = r.cache.Remove(AllItemsKey)
+	err = r.config.Cache.Remove(AllItemsKey)
 	if err != nil {
 		return err
 	}
 
-	return r.database.Delete(ctx, id, domain.ItemB{})
+	return r.config.Database.Delete(ctx, id, domain.ItemB{})
 }
