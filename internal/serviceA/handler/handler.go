@@ -65,7 +65,7 @@ func (h *Handler) Find(c *gin.Context) {
 	id := c.Param("id")
 	resp, err := h.config.Service.GetOneByID(ctx, id)
 	if err != nil {
-		h.config.HttpError.GetStatusCodeFromError(err)
+		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -94,7 +94,7 @@ func (h *Handler) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 	obj, err := h.config.Service.Create(ctx, input)
 	if err != nil {
-		h.config.HttpError.GetStatusCodeFromError(err)
+		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -125,7 +125,7 @@ func (h *Handler) Update(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
 	if err = h.config.Service.Update(ctx, id, input); err != nil {
-		h.config.HttpError.GetStatusCodeFromError(err)
+		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -148,7 +148,7 @@ func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
 	if err := h.config.Service.Delete(ctx, id); err != nil {
-		h.config.HttpError.GetStatusCodeFromError(err)
+		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
