@@ -10,15 +10,18 @@ import (
 	"microservices-boilerplate/internal/serviceB/service"
 )
 
-type Handler struct {
-	service   service.Service
-	httpError httpService.Error
+type Config struct {
+	Service   service.Service
+	HttpError httpService.Error
 }
 
-func New(service service.Service) *Handler {
+type Handler struct {
+	config *Config
+}
+
+func New(config *Config) *Handler {
 	return &Handler{
-		service:   service,
-		httpError: httpService.NewHttpError(),
+		config: config,
 	}
 }
 
@@ -33,9 +36,9 @@ func New(service service.Service) *Handler {
 // @Router      /b-items [get]
 func (h *Handler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	resp, err := h.service.GetAll(ctx)
+	resp, err := h.config.Service.GetAll(ctx)
 	if err != nil {
-		h.httpError.GetStatusCodeFromError(err)
+		h.config.HttpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -57,9 +60,9 @@ func (h *Handler) Get(c *gin.Context) {
 func (h *Handler) Find(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
-	resp, err := h.service.GetOneByID(ctx, id)
+	resp, err := h.config.Service.GetOneByID(ctx, id)
 	if err != nil {
-		h.httpError.GetStatusCodeFromError(err)
+		h.config.HttpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -87,9 +90,9 @@ func (h *Handler) Create(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
-	obj, err := h.service.Create(ctx, input)
+	obj, err := h.config.Service.Create(ctx, input)
 	if err != nil {
-		h.httpError.GetStatusCodeFromError(err)
+		h.config.HttpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -119,8 +122,8 @@ func (h *Handler) Update(c *gin.Context) {
 
 	ctx := c.Request.Context()
 	id := c.Param("id")
-	if err = h.service.Update(ctx, id, input); err != nil {
-		h.httpError.GetStatusCodeFromError(err)
+	if err = h.config.Service.Update(ctx, id, input); err != nil {
+		h.config.HttpError.GetStatusCodeFromError(err)
 		return
 	}
 
@@ -142,8 +145,8 @@ func (h *Handler) Update(c *gin.Context) {
 func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
-	if err := h.service.Delete(ctx, id); err != nil {
-		h.httpError.GetStatusCodeFromError(err)
+	if err := h.config.Service.Delete(ctx, id); err != nil {
+		h.config.HttpError.GetStatusCodeFromError(err)
 		return
 	}
 

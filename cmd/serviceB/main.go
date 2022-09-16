@@ -38,10 +38,12 @@ func main() {
 	api := server.New(
 		serviceB.NewApi(
 			handler.New(
-				service.New(
-					cfg.Logger,
-					repository.New(cfg.Database, cfg.Cache),
-				),
+				&handler.Config{
+					Service: service.New(
+						cfg.Logger,
+						repository.New(cfg.Database, cfg.Cache),
+					),
+				},
 			),
 			router,
 		),
