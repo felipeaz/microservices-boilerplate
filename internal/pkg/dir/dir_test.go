@@ -17,14 +17,12 @@ func TestDir(t *testing.T) {
 
 var _ = Describe("Dir", func() {
 	Context("Generating application logs", func() {
-		Context("When Debug is disabled", func() {
-			When("Logging Debug type", func() {
-				It("Should not call debug.Println", func() {
-					dir := GetProjectRootDirectory()
-					folders := strings.Split(dir, "/")
-					rootDir := folders[len(folders)-1]
-					Expect(rootDir).To(BeEquivalentTo(assertion.RootDir))
-				})
+		When("When Debug is disabled", func() {
+			It("Should not call debug.Println", func() {
+				dir := GetProjectRootDirectory()
+				folders := strings.Split(dir, "/")
+				rootDir := folders[len(folders)-1]
+				Expect(rootDir).To(BeEquivalentTo(assertion.RootDir))
 			})
 		})
 	})

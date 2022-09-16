@@ -81,6 +81,5 @@ var _ = Describe("Log", func() {
 var _ = AfterSuite(func() {
 	logFile := fmt.Sprintf("%s/%s", GetLogPath(), assertion.LogFile)
 	err := os.Remove(logFile)
-
 	Expect(err).NotTo(HaveOccurred())
 })
