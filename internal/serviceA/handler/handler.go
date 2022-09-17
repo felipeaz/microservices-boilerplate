@@ -4,7 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"microservices-boilerplate/api"
 	httpService "microservices-boilerplate/internal/http"
 	"microservices-boilerplate/internal/serviceA/domain"
 	"microservices-boilerplate/internal/serviceA/service"
@@ -26,6 +29,25 @@ func New(config *Config) *Handler {
 	}
 	handler.RegisterRoutes()
 	return handler
+}
+
+func (h *Handler) RegisterRoutes() {
+	h.config.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	apiGroup := h.config.Router.Group("/api")
+	{
+		vGroup := apiGroup.Group("/v1")
+		{
+			vGroup.GET("/a-items", h.Get)
+			vGroup.GET("/a-items/:id", h.Find)
+			vGroup.POST("/a-items", h.Create)
+			vGroup.PUT("/a-items/:id", h.Update)
+			vGroup.DELETE("/a-items/:id", h.Delete)
+		}
+	}
+}
+
+func (h *Handler) GetRouter() api.Router {
+	return h.config.Router
 }
 
 // Get godoc

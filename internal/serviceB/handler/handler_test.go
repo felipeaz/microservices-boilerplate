@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	httpErrorMocks "microservices-boilerplate/internal/test/mocks/http"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -355,6 +356,41 @@ var _ = Describe("Handler", func() {
 
 					Expect(w.Code).To(Equal(http.StatusNotFound))
 				})
+			})
+		})
+	})
+})
+
+var _ = Describe("Api", func() {
+	var (
+		r          *gin.Engine
+		apiHandler *Handler
+	)
+
+	BeforeEach(func() {
+		gin.SetMode(gin.TestMode)
+		_, r = gin.CreateTestContext(httptest.NewRecorder())
+		apiHandler = New(
+			&Config{
+				Service:   serviceMocks.NewService(GinkgoT()),
+				HttpError: httpErrorMocks.NewError(GinkgoT()),
+				Router:    r,
+			},
+		)
+	})
+	Context("Testing API", func() {
+		Context("RegisterRoutes", func() {
+			router := apiHandler.GetRouter()
+
+			Expect(router).ToNot(BeNil())
+		})
+
+		Context("GetRouter", func() {
+			It("Should return the router", func() {
+				router := apiHandler.GetRouter()
+
+				Expect(router).ToNot(BeNil())
+				Expect(router).To(Equal(r))
 			})
 		})
 	})
