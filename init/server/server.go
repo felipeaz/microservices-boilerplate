@@ -7,7 +7,7 @@ import (
 )
 
 type Server interface {
-	Run(port string)
+	Run(addr ...string)
 }
 
 func New(api api.Api) Server {
@@ -20,8 +20,8 @@ type server struct {
 	api api.Api
 }
 
-func (s *server) Run(port string) {
-	err := s.api.Run(port)
+func (s *server) Run(addr ...string) {
+	err := s.api.GetRouter().Run(addr...)
 	if err != nil {
 		log.Fatal("failed to initialize server")
 	}

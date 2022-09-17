@@ -35,7 +35,7 @@ func main() {
 	router := gin.Default()
 	router.Use(middleware.New().Cors())
 
-	api := server.New(
+	server.New(
 		handler.New(
 			&handler.Config{
 				Service: service.New(
@@ -52,7 +52,5 @@ func main() {
 				Router: router,
 			},
 		),
-	)
-
-	api.Run(cfg.Port)
+	).Run(cfg.Port)
 }

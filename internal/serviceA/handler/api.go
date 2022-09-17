@@ -3,6 +3,8 @@ package handler
 import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	"microservices-boilerplate/api"
 )
 
 func (h *Handler) RegisterRoutes() {
@@ -20,6 +22,6 @@ func (h *Handler) RegisterRoutes() {
 	}
 }
 
-func (h *Handler) Run(port string) error {
-	return h.config.Router.Run(port)
+func (h *Handler) GetRouter() api.Router {
+	return h.config.Router
 }
