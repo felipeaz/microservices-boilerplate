@@ -18,7 +18,14 @@ func TestLog(t *testing.T) {
 }
 
 var _ = Describe("Log", func() {
-	logFile := fmt.Sprintf("%s/%s", GetLogPath(), assertion.LogFile)
+	var (
+		logFile string
+	)
+
+	BeforeEach(func() {
+		logFile = fmt.Sprintf("%s/%s", GetLogPath(), assertion.LogFile)
+	})
+
 	Context("Generating application logs", func() {
 		Context("When Debug is disabled", func() {
 			logger := NewLogger(assertion.LogTime, false)

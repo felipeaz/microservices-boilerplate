@@ -27,7 +27,7 @@ type Logger interface {
 
 // NewLogger returns an implementation of Logger
 func NewLogger(date time.Time, debugMode bool) Logger {
-	logPath, err := initializeLogPath(date)
+	logPath := initializeLogPath(date)
 	lf, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal("unable to initialize log file", logPath, err)
@@ -73,13 +73,16 @@ func GetLogPath() string {
 	return fmt.Sprintf("%s/%s", dir.GetProjectRootDirectory(), dirPrefix)
 }
 
-func initializeLogPath(date time.Time) (string, error) {
+func initializeLogPath(date time.Time) string {
 	logDir := GetLogPath()
+
 	err := os.MkdirAll(logDir, os.ModePerm)
 	if err != nil {
-		return "", err
+		log.Fatal("failed to create dir", err)
 	}
+
 	fileName := date.Format("01-02-2006")
 	logFile := fmt.Sprintf("%s/%s.txt", logDir, fileName)
-	return logFile, nil
+
+	return logFile
 }
