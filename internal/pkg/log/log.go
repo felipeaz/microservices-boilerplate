@@ -2,6 +2,7 @@ package log
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"time"
@@ -26,19 +27,14 @@ type Logger interface {
 }
 
 // NewLogger returns an implementation of Logger
-func NewLogger(date time.Time, debugMode bool) Logger {
-	logPath := initializeLogPath(date)
-	lf, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatal("unable to initialize log file", logPath, err)
-	}
+func NewLogger(output io.Writer, debugMode bool) Logger {
 	l := logger{
-		info: log.New(os.Stdout, infoPrefix, log.LstdFlags|log.Lshortfile),
-		warn: log.New(os.Stdout, warnPrefix, log.LstdFlags|log.Lshortfile),
-		err:  log.New(lf, errPrefix, log.LstdFlags|log.Lshortfile),
+		info: log.New(output, infoPrefix, log.LstdFlags|log.Lshortfile),
+		warn: log.New(output, warnPrefix, log.LstdFlags|log.Lshortfile),
+		err:  log.New(output, errPrefix, log.LstdFlags|log.Lshortfile),
 	}
 	if debugMode {
-		l.debug = log.New(os.Stdout, debugPrefix, log.LstdFlags|log.Lshortfile)
+		l.debug = log.New(output, debugPrefix, log.LstdFlags|log.Lshortfile)
 	}
 	return l
 }
@@ -69,20 +65,20 @@ func (l logger) Debug(v ...interface{}) {
 	}
 }
 
-func GetLogPath() string {
-	return fmt.Sprintf("%s/%s", dir.GetProjectRootDirectory(), dirPrefix)
-}
-
-func initializeLogPath(date time.Time) string {
-	logDir := GetLogPath()
-
-	err := os.MkdirAll(logDir, os.ModePerm)
+// NewLogFile creates file with the current date
+func NewLogFile(t time.Time, logPath string) io.Writer {
+	err := os.MkdirAll(logPath, os.ModePerm)
 	if err != nil {
-		log.Fatal("failed to create dir", err)
+		log.Println("failed to initialize log file", err)
+		return os.Stdout
 	}
 
-	fileName := date.Format("01-02-2006")
-	logFile := fmt.Sprintf("%s/%s.txt", logDir, fileName)
+	fileName := fmt.Sprintf("%s/%s.txt", logPath, t.UTC().Format("01-02-2006"))
+	logFile, _ := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	return logFile
+}
+
+func GetLogPath() string {
+	return fmt.Sprintf("%s/%s", dir.GetProjectRootDirectory(), dirPrefix)
 }
