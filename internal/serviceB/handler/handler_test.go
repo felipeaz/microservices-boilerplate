@@ -379,12 +379,6 @@ var _ = Describe("Api", func() {
 		)
 	})
 	Context("Testing API", func() {
-		Context("RegisterRoutes", func() {
-			router := apiHandler.GetRouter()
-
-			Expect(router).ToNot(BeNil())
-		})
-
 		Context("GetRouter", func() {
 			It("Should return the router", func() {
 				router := apiHandler.GetRouter()
