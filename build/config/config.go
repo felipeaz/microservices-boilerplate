@@ -5,8 +5,8 @@ import (
 	"microservices-boilerplate/build/flags"
 	"microservices-boilerplate/internal/pkg/log"
 	"microservices-boilerplate/internal/storage"
-	"microservices-boilerplate/third_party/postgresql"
-	"microservices-boilerplate/third_party/redis"
+	"microservices-boilerplate/third_party/cache/redis"
+	"microservices-boilerplate/third_party/database/postgresql"
 	"time"
 )
 
