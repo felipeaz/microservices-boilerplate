@@ -31,7 +31,7 @@ var _ = Describe("Service", func() {
 		logMock = pkgMock.NewLogger(GinkgoT())
 		repoMock = repositoryMock.NewRepository(GinkgoT())
 		s = service.New(
-			&service.Config{
+			&service.DependenciesNode{
 				Log:        logMock,
 				Repository: repoMock,
 			},

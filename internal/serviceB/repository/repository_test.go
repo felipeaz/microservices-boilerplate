@@ -30,7 +30,7 @@ var _ = Describe("Repository", func() {
 		cacheMock = storageMock.NewCache(GinkgoT())
 		databaseMock = storageMock.NewDatabase(GinkgoT())
 		repo = repository.New(
-			&repository.Config{
+			&repository.DependenciesNode{
 				Database: databaseMock,
 				Cache:    cacheMock,
 			},

@@ -37,7 +37,7 @@ var _ = Describe("Handler", func() {
 		w           *httptest.ResponseRecorder
 		ginCtx      *gin.Context
 		serviceMock *serviceMocks.Service
-		config      *Config
+		deps        *DependenciesNode
 	)
 
 	BeforeEach(func() {
@@ -45,7 +45,7 @@ var _ = Describe("Handler", func() {
 		w = httptest.NewRecorder()
 		ginCtx, router = gin.CreateTestContext(w)
 		serviceMock = serviceMocks.NewService(GinkgoT())
-		config = &Config{
+		deps = &DependenciesNode{
 			Service:   serviceMock,
 			HttpError: httpErr.NewHttpError(),
 			Router:    router,
@@ -60,7 +60,7 @@ var _ = Describe("Handler", func() {
 					serviceMock.On("GetAll", ginCtx).
 						Return(assertion.ArrayOfItem, nil)
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(ginCtx, http.MethodGet, "/api/v1/b-items", nil)
 					Expect(err).ToNot(HaveOccurred())
@@ -79,7 +79,7 @@ var _ = Describe("Handler", func() {
 					serviceMock.On("GetAll", ginCtx).
 						Return(nil, errorsAssertion.ErrGeneric)
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(ginCtx, http.MethodGet, "/api/v1/b-items", nil)
 					Expect(err).ToNot(HaveOccurred())
@@ -106,7 +106,7 @@ var _ = Describe("Handler", func() {
 						ginCtxParam("id", itemID),
 					}
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -134,7 +134,7 @@ var _ = Describe("Handler", func() {
 						ginCtxParam("id", itemID),
 					}
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -163,7 +163,7 @@ var _ = Describe("Handler", func() {
 					serviceMock.On("Create", ginCtx, itemInput).
 						Return(&expectedOutput, nil)
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -184,7 +184,7 @@ var _ = Describe("Handler", func() {
 			})
 			When("Fails", func() {
 				It("Return Bad Request when fails to Bind Input JSON", func() {
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -209,7 +209,7 @@ var _ = Describe("Handler", func() {
 					serviceMock.On("Create", ginCtx, itemInput).
 						Return(nil, errorsAssertion.ErrCreatingUUID)
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -238,7 +238,7 @@ var _ = Describe("Handler", func() {
 					serviceMock.On("Update", ginCtx, itemID, itemInput).
 						Return(nil)
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -259,7 +259,7 @@ var _ = Describe("Handler", func() {
 			When("Fails", func() {
 				It("Return a Bad Request Error when fails to Bind Input JSON", func() {
 					itemID := assertion.SampleID.String()
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -283,7 +283,7 @@ var _ = Describe("Handler", func() {
 					serviceMock.On("Update", ginCtx, itemID, itemInput).
 						Return(errorsAssertion.ErrNotFound)
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -313,7 +313,7 @@ var _ = Describe("Handler", func() {
 						ginCtxParam("id", itemID),
 					}
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -340,7 +340,7 @@ var _ = Describe("Handler", func() {
 						ginCtxParam("id", itemID),
 					}
 
-					New(config)
+					New(deps)
 
 					request, err := http.NewRequestWithContext(
 						ginCtx,
@@ -371,7 +371,7 @@ var _ = Describe("Api", func() {
 		gin.SetMode(gin.TestMode)
 		_, r = gin.CreateTestContext(httptest.NewRecorder())
 		apiHandler = New(
-			&Config{
+			&DependenciesNode{
 				Service:   serviceMocks.NewService(GinkgoT()),
 				HttpError: httpErrorMocks.NewError(GinkgoT()),
 				Router:    r,

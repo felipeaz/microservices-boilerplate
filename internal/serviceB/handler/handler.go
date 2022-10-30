@@ -13,27 +13,27 @@ import (
 	"microservices-boilerplate/internal/serviceB/service"
 )
 
-type Config struct {
+type DependenciesNode struct {
 	Service   service.Service
 	HttpError httpService.Error
 	Router    *gin.Engine
 }
 
 type Handler struct {
-	config *Config
+	deps *DependenciesNode
 }
 
-func New(config *Config) *Handler {
+func New(deps *DependenciesNode) *Handler {
 	handler := &Handler{
-		config: config,
+		deps: deps,
 	}
 	handler.RegisterRoutes()
 	return handler
 }
 
 func (h *Handler) RegisterRoutes() {
-	h.config.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	apiGroup := h.config.Router.Group("/api")
+	h.deps.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	apiGroup := h.deps.Router.Group("/api")
 	{
 		vGroup := apiGroup.Group("/v1")
 		{
@@ -47,7 +47,7 @@ func (h *Handler) RegisterRoutes() {
 }
 
 func (h *Handler) GetRouter() api.Router {
-	return h.config.Router
+	return h.deps.Router
 }
 
 // Get godoc
@@ -61,9 +61,9 @@ func (h *Handler) GetRouter() api.Router {
 // @Router      /b-items [get]
 func (h *Handler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	resp, err := h.config.Service.GetAll(ctx)
+	resp, err := h.deps.Service.GetAll(ctx)
 	if err != nil {
-		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
+		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -85,9 +85,9 @@ func (h *Handler) Get(c *gin.Context) {
 func (h *Handler) Find(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
-	resp, err := h.config.Service.GetOneByID(ctx, id)
+	resp, err := h.deps.Service.GetOneByID(ctx, id)
 	if err != nil {
-		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
+		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -115,9 +115,9 @@ func (h *Handler) Create(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
-	obj, err := h.config.Service.Create(ctx, input)
+	obj, err := h.deps.Service.Create(ctx, input)
 	if err != nil {
-		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
+		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -147,8 +147,8 @@ func (h *Handler) Update(c *gin.Context) {
 
 	ctx := c.Request.Context()
 	id := c.Param("id")
-	if err = h.config.Service.Update(ctx, id, input); err != nil {
-		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
+	if err = h.deps.Service.Update(ctx, id, input); err != nil {
+		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 
@@ -170,8 +170,8 @@ func (h *Handler) Update(c *gin.Context) {
 func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param("id")
-	if err := h.config.Service.Delete(ctx, id); err != nil {
-		c.JSON(h.config.HttpError.GetStatusCodeFromError(err), err)
+	if err := h.deps.Service.Delete(ctx, id); err != nil {
+		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
 	}
 

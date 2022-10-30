@@ -37,12 +37,12 @@ func main() {
 
 	server.New(
 		handler.New(
-			&handler.Config{
+			&handler.DependenciesNode{
 				Service: service.New(
-					&service.Config{
+					&service.DependenciesNode{
 						Log: cfg.Logger,
 						Repository: repository.New(
-							&repository.Config{
+							&repository.DependenciesNode{
 								Database: cfg.Database,
 								Cache:    cfg.Cache,
 							},
