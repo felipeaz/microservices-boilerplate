@@ -59,6 +59,11 @@ Ref: https://github.com/satori/go.uuid
 #### Enable API to external origins
 Ref: https://github.com/itsjamie/gin-cors
 
+### Observability
+#### Application monitoring using Prometheus and Grafana
+Ref: https://grafana.com/
+Ref: https://prometheus.io/
+
 ### API Documentation
 #### Gin-Swagger: Swagger API Definitions
 Ref: https://github.com/swaggo/gin-swagger
