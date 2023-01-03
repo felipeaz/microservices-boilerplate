@@ -6,7 +6,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 
 	"microservices-boilerplate/internal/constants"
-	"microservices-boilerplate/internal/pkg/log"
+	"microservices-boilerplate/internal/logger"
 	"microservices-boilerplate/internal/serviceA/domain"
 	"microservices-boilerplate/internal/serviceA/repository"
 )
@@ -20,7 +20,7 @@ type Service interface {
 }
 
 type DependenciesNode struct {
-	Log        log.Logger
+	Log        logger.Logger
 	Repository repository.Repository
 }
 
