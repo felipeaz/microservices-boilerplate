@@ -1,8 +1,6 @@
 package handler
 
 import (
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"microservices-boilerplate/api"
 )
 
@@ -11,12 +9,7 @@ func (h *Handler) GetRouter() api.Router {
 }
 
 func (h *Handler) RegisterRoutes() {
-	h.registerSwagger()
 	h.registerApi()
-}
-
-func (h *Handler) registerSwagger() {
-	h.deps.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
 func (h *Handler) registerApi() {

@@ -3,9 +3,6 @@ package main
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
-
-	"microservices-boilerplate/api/middleware"
 	"microservices-boilerplate/build/config"
 	"microservices-boilerplate/build/env"
 	"microservices-boilerplate/build/flags"
@@ -32,8 +29,6 @@ func main() {
 	}()
 
 	cfg := config.Build(env.Build(), flags.Build())
-	router := gin.Default()
-	router.Use(middleware.New().Cors())
 
 	server.New(
 		handler.New(
@@ -49,7 +44,7 @@ func main() {
 						),
 					},
 				),
-				Router: router,
+				Router: cfg.Router,
 			},
 		),
 	).Run(cfg.Port)
