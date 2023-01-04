@@ -14,7 +14,7 @@ type Middleware struct {
 }
 
 // Cors provides a mock function with given fields:
-func (_m *Middleware) Cors() gin.HandlerFunc {
+func (_m *Middleware) HandleFunc() gin.HandlerFunc {
 	ret := _m.Called()
 
 	var r0 gin.HandlerFunc

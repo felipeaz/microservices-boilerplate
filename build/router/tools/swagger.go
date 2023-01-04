@@ -6,6 +6,10 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+const (
+	defaultSwaggerPath = "/swagger/*any"
+)
+
 func httpRouteSwagger(router *gin.Engine) {
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET(defaultSwaggerPath, ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
