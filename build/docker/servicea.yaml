@@ -9,11 +9,11 @@ services:
     networks:
       - services-network
     env_file:
-      - ../../.env
+      - ../../local.env
     depends_on:
-      - "serviceA-db-host"
+      - "service-a-db-host"
     restart: unless-stopped
-    working_dir: "/go/src/go-app/"
+    working_dir: "/go/src/microservices-boilerplate/cmd/serviceA"
     expose:
       - 8082
     command: bash -c "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
@@ -26,11 +26,12 @@ services:
     networks:
       - services-network
     environment:
-      MYSQL_DATABASE: Admin
-      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: admin
+      MYSQL_ROOT_PASSWORD: admin
       MYSQL_TCP_PORT: 3308
     ports:
       - "3308:3307"
 networks:
   services-network:
     external: true
+    driver: overlay

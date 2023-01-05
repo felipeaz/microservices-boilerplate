@@ -9,14 +9,14 @@ services:
     networks:
       - services-network
     env_file:
-      - ../../.env
+      - ../../local.env
     links:
       - redis
     depends_on:
-      - "serviceB-db-host"
+      - "service-b-db-host"
       - "redis"
     restart: unless-stopped
-    working_dir: "/go/src/go-app/"
+    working_dir: "/go/src/microservices-boilerplate/cmd/serviceB"
     expose:
       - 8083
     command: bash -c "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
@@ -29,11 +29,12 @@ services:
     networks:
       - services-network
     environment:
-      MYSQL_DATABASE: LibraryPlatform
-      MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_DATABASE: admin
+      MYSQL_ROOT_PASSWORD: admin
       MYSQL_TCP_PORT: 3309
     ports:
       - "3309:3306"
 networks:
   services-network:
     external: true
+    driver: overlay
