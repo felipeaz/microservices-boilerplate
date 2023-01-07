@@ -17,7 +17,7 @@ services:
       - service-a-redis
     expose:
       - 8082
-    command: bash -c "GO111MODULE=off CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
+    command: bash -c "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
     ports:
       - "8082:8082"
     networks:

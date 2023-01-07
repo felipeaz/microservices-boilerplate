@@ -1,16 +1,14 @@
 FROM golang:alpine
 
-WORKDIR /app
+# Add files to app dir
+ADD . /app
 
-# Copy dir to workdir
-COPY . /app
+# Set /app as the workdir
+WORKDIR /app
 
 # Install git & bash
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
-
-# Copy go mod and sum files
-COPY go.mod go.sum /app/
 
 # Update module dependencies
 RUN go mod tidy
