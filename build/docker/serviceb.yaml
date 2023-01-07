@@ -8,14 +8,13 @@ services:
     container_name: service-b
     working_dir: "/app/cmd/serviceB"
     env_file:
-      - ../../local.env
+      - ../services/serviceB/service.env
     depends_on:
       - "service-b-db"
       - "service-b-redis"
     links:
       - service-b-db
       - service-b-redis
-    restart: unless-stopped
     expose:
       - 8083
     command: bash -c "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"

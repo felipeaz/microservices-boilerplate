@@ -8,7 +8,7 @@ services:
     container_name: service-a
     working_dir: "/app/cmd/serviceA"
     env_file:
-      - ../../local.env
+      - ../services/serviceA/service.env
     depends_on:
       - "service-a-db"
       - "service-a-redis"
