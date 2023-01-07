@@ -12,11 +12,11 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	httpErr "microservices-boilerplate/internal/http"
-	errorsAssertion "microservices-boilerplate/internal/test/assertion/errors"
-	assertion "microservices-boilerplate/internal/test/assertion/serviceA"
-	httpErrorMocks "microservices-boilerplate/internal/test/mocks/http"
-	serviceMocks "microservices-boilerplate/internal/test/mocks/serviceA/service"
+	httpErr "app/internal/http"
+	errorsAssertion "app/internal/test/assertion/errors"
+	assertion "app/internal/test/assertion/serviceA"
+	httpErrorMocks "app/internal/test/mocks/http"
+	serviceMocks "app/internal/test/mocks/serviceA/service"
 )
 
 func TestHandler(t *testing.T) {

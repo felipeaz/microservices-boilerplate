@@ -7,12 +7,12 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/stretchr/testify/mock"
 
-	"microservices-boilerplate/internal/serviceA/service"
-	commonAssertion "microservices-boilerplate/internal/test/assertion/common"
-	errorsAssertion "microservices-boilerplate/internal/test/assertion/errors"
-	assertion "microservices-boilerplate/internal/test/assertion/serviceA"
-	pkgMock "microservices-boilerplate/internal/test/mocks/pkg"
-	repositoryMock "microservices-boilerplate/internal/test/mocks/serviceA/repository"
+	"app/internal/serviceA/service"
+	commonAssertion "app/internal/test/assertion/common"
+	errorsAssertion "app/internal/test/assertion/errors"
+	assertion "app/internal/test/assertion/serviceA"
+	pkgMock "app/internal/test/mocks/pkg"
+	repositoryMock "app/internal/test/mocks/serviceA/repository"
 )
 
 func TestService(t *testing.T) {

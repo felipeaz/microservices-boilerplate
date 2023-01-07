@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	assertion "microservices-boilerplate/internal/test/assertion/pkg"
+	assertion "app/internal/test/assertion/pkg"
 )
 
 func TestLog(t *testing.T) {

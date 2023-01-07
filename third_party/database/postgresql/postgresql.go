@@ -10,7 +10,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"microservices-boilerplate/internal/storage"
+	"app/internal/storage"
 )
 
 type postgresql struct {

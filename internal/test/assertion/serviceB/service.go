@@ -5,7 +5,7 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"microservices-boilerplate/internal/serviceB/domain"
+	"app/internal/serviceB/domain"
 )
 
 var (

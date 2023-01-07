@@ -3,7 +3,7 @@ package server
 import (
 	"log"
 
-	"microservices-boilerplate/api"
+	"app/api"
 )
 
 type Server interface {

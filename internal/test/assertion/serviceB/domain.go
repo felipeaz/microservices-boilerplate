@@ -3,7 +3,7 @@ package serviceB
 import (
 	"encoding/json"
 
-	"microservices-boilerplate/internal/serviceB/domain"
+	"app/internal/serviceB/domain"
 )
 
 func ItemBInBytes(item *domain.ItemB) []byte {

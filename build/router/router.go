@@ -3,8 +3,8 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
-	"microservices-boilerplate/api/middleware"
-	"microservices-boilerplate/build/router/tools"
+	"app/api/middleware"
+	"app/build/router/tools"
 )
 
 func New() *gin.Engine {

@@ -6,8 +6,8 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"microservices-boilerplate/internal/serviceA/domain"
-	assertion "microservices-boilerplate/internal/test/assertion/serviceA"
+	"app/internal/serviceA/domain"
+	assertion "app/internal/test/assertion/serviceA"
 )
 
 func TestService(t *testing.T) {

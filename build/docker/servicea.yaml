@@ -3,35 +3,43 @@ version: '3.7'
 services:
   service-a:
     build:
-      context: ".."
-      dockerfile: "docker/images/go/Dockerfile"
-    container_name: serviceA
-    networks:
-      - services-network
+      context: "../../"
+      dockerfile: "build/docker/images/go/Dockerfile"
+    container_name: service-a
+    working_dir: "/app/cmd/serviceA"
     env_file:
       - ../../local.env
     depends_on:
-      - "service-a-db-host"
-    restart: unless-stopped
-    working_dir: "/go/src/microservices-boilerplate/cmd/serviceA"
+      - "service-a-db"
+      - "service-a-redis"
+    links:
+      - service-a-db
+      - service-a-redis
     expose:
       - 8082
-    command: bash -c "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
+    command: bash -c "GO111MODULE=off CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . && ./main"
     ports:
       - "8082:8082"
-  service-a-db-host:
-    image: mysql:8.0
-    container_name: serviceA-database
-    platform: linux/x86_64
     networks:
       - services-network
+  service-a-db:
+    image: postgres:latest
+    container_name: service-a-db
     environment:
-      MYSQL_DATABASE: admin
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_TCP_PORT: 3308
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=ServiceA
     ports:
-      - "3308:3307"
+      - '5433:5432'
+    networks:
+      - services-network
+  service-a-redis:
+    image: redis:alpine
+    container_name: redis
+    networks:
+      - services-network
+    ports:
+      - "6380:6379"
 networks:
   services-network:
     external: true
-    driver: overlay

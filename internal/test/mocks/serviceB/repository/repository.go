@@ -3,8 +3,8 @@
 package repository
 
 import (
+	domain "app/internal/serviceB/domain"
 	context "context"
-	domain "microservices-boilerplate/internal/serviceB/domain"
 
 	mock "github.com/stretchr/testify/mock"
 

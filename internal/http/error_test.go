@@ -8,8 +8,8 @@ import (
 	. "github.com/onsi/gomega"
 	"gorm.io/gorm"
 
-	httpService "microservices-boilerplate/internal/http"
-	assertionErrors "microservices-boilerplate/internal/test/assertion/errors"
+	httpService "app/internal/http"
+	assertionErrors "app/internal/test/assertion/errors"
 )
 
 func TestError(t *testing.T) {

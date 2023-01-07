@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"microservices-boilerplate/api"
+	"app/api"
 )
 
 func (h *Handler) GetRouter() api.Router {

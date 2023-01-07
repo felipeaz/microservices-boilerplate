@@ -1,14 +1,14 @@
 package config
 
 import (
+	"app/build/env"
+	"app/build/flags"
+	"app/build/router"
+	"app/internal/logger"
+	"app/internal/storage"
+	"app/third_party/cache/redis"
+	"app/third_party/database/postgresql"
 	"github.com/gin-gonic/gin"
-	"microservices-boilerplate/build/env"
-	"microservices-boilerplate/build/flags"
-	"microservices-boilerplate/build/router"
-	"microservices-boilerplate/internal/logger"
-	"microservices-boilerplate/internal/storage"
-	"microservices-boilerplate/third_party/cache/redis"
-	"microservices-boilerplate/third_party/database/postgresql"
 )
 
 type Config struct {

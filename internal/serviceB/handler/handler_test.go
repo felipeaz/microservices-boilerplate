@@ -1,10 +1,10 @@
 package handler
 
 import (
+	httpErrorMocks "app/internal/test/mocks/http"
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	httpErrorMocks "microservices-boilerplate/internal/test/mocks/http"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,10 +13,10 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	httpErr "microservices-boilerplate/internal/http"
-	errorsAssertion "microservices-boilerplate/internal/test/assertion/errors"
-	assertion "microservices-boilerplate/internal/test/assertion/serviceB"
-	serviceMocks "microservices-boilerplate/internal/test/mocks/serviceB/service"
+	httpErr "app/internal/http"
+	errorsAssertion "app/internal/test/assertion/errors"
+	assertion "app/internal/test/assertion/serviceB"
+	serviceMocks "app/internal/test/mocks/serviceB/service"
 )
 
 func TestHandler(t *testing.T) {

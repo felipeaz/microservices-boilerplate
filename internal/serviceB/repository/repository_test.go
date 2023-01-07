@@ -6,12 +6,12 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"microservices-boilerplate/internal/serviceB/domain"
-	"microservices-boilerplate/internal/serviceB/repository"
-	commonAssertion "microservices-boilerplate/internal/test/assertion/common"
-	errorsAssertion "microservices-boilerplate/internal/test/assertion/errors"
-	assertion "microservices-boilerplate/internal/test/assertion/serviceB"
-	storageMock "microservices-boilerplate/internal/test/mocks/storage"
+	"app/internal/serviceB/domain"
+	"app/internal/serviceB/repository"
+	commonAssertion "app/internal/test/assertion/common"
+	errorsAssertion "app/internal/test/assertion/errors"
+	assertion "app/internal/test/assertion/serviceB"
+	storageMock "app/internal/test/mocks/storage"
 )
 
 func TestService(t *testing.T) {

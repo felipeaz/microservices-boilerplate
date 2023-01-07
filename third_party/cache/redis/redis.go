@@ -6,7 +6,7 @@ import (
 
 	redigo "github.com/gomodule/redigo/redis"
 
-	"microservices-boilerplate/internal/storage"
+	"app/internal/storage"
 )
 
 type redis struct {

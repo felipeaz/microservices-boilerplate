@@ -5,8 +5,8 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"microservices-boilerplate/internal/serviceB/domain"
-	"microservices-boilerplate/internal/storage"
+	"app/internal/serviceB/domain"
+	"app/internal/storage"
 )
 
 const (

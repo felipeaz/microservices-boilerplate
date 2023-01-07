@@ -5,10 +5,10 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"microservices-boilerplate/internal/constants"
-	"microservices-boilerplate/internal/logger"
-	"microservices-boilerplate/internal/serviceB/domain"
-	"microservices-boilerplate/internal/serviceB/repository"
+	"app/internal/constants"
+	"app/internal/logger"
+	"app/internal/serviceB/domain"
+	"app/internal/serviceB/repository"
 )
 
 type Service interface {

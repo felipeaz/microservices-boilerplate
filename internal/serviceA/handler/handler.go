@@ -3,10 +3,10 @@ package handler
 import (
 	"net/http"
 
+	httpService "app/internal/http"
+	"app/internal/serviceA/domain"
+	"app/internal/serviceA/service"
 	"github.com/gin-gonic/gin"
-	httpService "microservices-boilerplate/internal/http"
-	"microservices-boilerplate/internal/serviceA/domain"
-	"microservices-boilerplate/internal/serviceA/service"
 )
 
 type DependenciesNode struct {

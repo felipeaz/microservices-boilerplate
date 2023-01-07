@@ -3,15 +3,15 @@ package main
 import (
 	"log"
 
-	"microservices-boilerplate/build/config"
-	"microservices-boilerplate/build/env"
-	"microservices-boilerplate/build/flags"
-	"microservices-boilerplate/init/server"
-	"microservices-boilerplate/internal/serviceA/handler"
-	"microservices-boilerplate/internal/serviceA/repository"
-	"microservices-boilerplate/internal/serviceA/service"
+	"app/build/config"
+	"app/build/env"
+	"app/build/flags"
+	"app/init/server"
+	"app/internal/serviceA/handler"
+	"app/internal/serviceA/repository"
+	"app/internal/serviceA/service"
 
-	_ "microservices-boilerplate/api/docs"
+	_ "app/api/docs"
 )
 
 // @title       Service A Swagger Example API
