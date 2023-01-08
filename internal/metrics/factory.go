@@ -2,66 +2,66 @@ package metrics
 
 import "github.com/prometheus/client_golang/prometheus"
 
-func NewMetric(m *Metric) prometheus.Collector {
-	switch m.Type {
+func (m *metric) New(p Properties) prometheus.Collector {
+	switch p.Type {
 	case CounterVec:
 		return prometheus.NewCounterVec(
 			prometheus.CounterOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
-			m.Properties,
+			p.Properties,
 		)
 	case Counter:
 		return prometheus.NewCounter(
 			prometheus.CounterOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
 		)
 	case GaugeVec:
 		return prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
-			m.Properties,
+			p.Properties,
 		)
 	case Gauge:
 		return prometheus.NewGauge(
 			prometheus.GaugeOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
 		)
 	case HistogramVec:
 		return prometheus.NewHistogramVec(
 			prometheus.HistogramOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
-			m.Properties,
+			p.Properties,
 		)
 	case Histogram:
 		return prometheus.NewHistogram(
 			prometheus.HistogramOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
 		)
 	case SummaryVec:
 		return prometheus.NewSummaryVec(
 			prometheus.SummaryOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
-			m.Properties,
+			p.Properties,
 		)
 	case Summary:
 		return prometheus.NewSummary(
 			prometheus.SummaryOpts{
-				Name: m.Name,
-				Help: m.Description,
+				Name: p.Name,
+				Help: p.Description,
 			},
 		)
 	default:

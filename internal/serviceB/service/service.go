@@ -7,6 +7,7 @@ import (
 
 	"app/internal/constants"
 	"app/internal/logger"
+	"app/internal/metrics"
 	"app/internal/serviceB/domain"
 	"app/internal/serviceB/repository"
 )
@@ -25,12 +26,14 @@ type DependenciesNode struct {
 }
 
 type service struct {
-	deps *DependenciesNode
+	deps    *DependenciesNode
+	metrics metrics.MetricCollector
 }
 
 func New(config *DependenciesNode) Service {
 	return &service{
-		deps: config,
+		deps:    config,
+		metrics: metrics.NewMetricCollector(),
 	}
 }
 

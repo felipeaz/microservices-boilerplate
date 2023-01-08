@@ -1,5 +1,7 @@
 package metrics
 
+import "github.com/prometheus/client_golang/prometheus"
+
 const (
 	CounterVec   = "counter_vec"
 	Counter      = "counter"
@@ -11,10 +13,20 @@ const (
 	Summary      = "summary"
 )
 
-type Metric struct {
+type Properties struct {
 	ID          string
 	Name        string
 	Description string
 	Type        string
 	Properties  []string
 }
+
+type MetricCollector interface {
+	New(p Properties) prometheus.Collector
+}
+
+func NewMetricCollector() MetricCollector {
+	return &metric{}
+}
+
+type metric struct{}
