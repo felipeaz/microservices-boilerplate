@@ -1,4 +1,4 @@
-package metric
+package metrics
 
 const (
 	CounterVec   = "counter_vec"
