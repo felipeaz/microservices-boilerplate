@@ -7,13 +7,11 @@ import (
 	"app/build/router/tools"
 )
 
-func New() *gin.Engine {
-	router := gin.Default()
+func New(routerEngine *gin.Engine) *gin.Engine {
+	registerStandardMiddlewares(routerEngine)
+	tools.RegisterStandardTools(routerEngine)
 
-	registerStandardMiddlewares(router)
-	tools.RegisterStandardTools(router)
-
-	return router
+	return routerEngine
 }
 
 func registerStandardMiddlewares(router *gin.Engine) {

@@ -12,6 +12,8 @@ import (
 	"app/internal/serviceA/service"
 
 	_ "app/api/docs"
+
+	"github.com/gin-gonic/gin"
 )
 
 // @title       Service A Swagger Example API
@@ -28,7 +30,13 @@ func main() {
 		}
 	}()
 
-	cfg := config.Build(env.Build(), flags.Build())
+	cfg := config.Build(
+		config.BuildArgs{
+			Env:    env.Build(),
+			Flags:  flags.Build(),
+			Router: gin.Default(),
+		},
+	)
 
 	server.New(
 		handler.New(
@@ -47,5 +55,5 @@ func main() {
 				Router: cfg.Router,
 			},
 		),
-	).Run(cfg.Port)
+	).Run(cfg.ServicePort)
 }

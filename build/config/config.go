@@ -11,20 +11,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Config struct {
-	Port     string
-	Database storage.Database
-	Cache    storage.Cache
-	Logger   logger.Logger
-	Router   *gin.Engine
+type BuildArgs struct {
+	Env    env.Env
+	Flags  flags.Flags
+	Router *gin.Engine
 }
 
-func Build(env env.Env, flags flags.Flags) Config {
+type Config struct {
+	ServicePort string
+	Database    storage.Database
+	Cache       storage.Cache
+	Logger      logger.Logger
+	Router      *gin.Engine
+}
+
+func Build(args BuildArgs) Config {
 	return Config{
-		Port:     env.Port,
-		Database: postgresql.New(env.DBHost, env.DBPort, env.DBUsername, env.DBPassword, env.DBName),
-		Cache:    redis.New(env.CacheHost, env.CachePort),
-		Logger:   logger.NewLogger(*flags.Debug),
-		Router:   router.New(),
+		ServicePort: args.Env.ServiceEnv.Server.Port,
+		Database: postgresql.New(
+			args.Env.DBEnv.Server.Host,
+			args.Env.DBEnv.Server.Port,
+			args.Env.DBEnv.Credentials.Username,
+			args.Env.DBEnv.Credentials.Password,
+			args.Env.DBEnv.DatabaseName,
+		),
+		Cache: redis.New(
+			args.Env.CacheEnv.Server.Host,
+			args.Env.CacheEnv.Server.Port,
+		),
+		Logger: logger.NewLogger(
+			*args.Flags.Debug,
+		),
+		Router: router.New(
+			args.Router,
+		),
 	}
 }
