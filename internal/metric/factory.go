@@ -10,7 +10,7 @@ func NewMetric(m *Metric) prometheus.Collector {
 				Name: m.Name,
 				Help: m.Description,
 			},
-			m.Args,
+			m.Properties,
 		)
 	case Counter:
 		return prometheus.NewCounter(
@@ -25,7 +25,7 @@ func NewMetric(m *Metric) prometheus.Collector {
 				Name: m.Name,
 				Help: m.Description,
 			},
-			m.Args,
+			m.Properties,
 		)
 	case Gauge:
 		return prometheus.NewGauge(
@@ -40,7 +40,7 @@ func NewMetric(m *Metric) prometheus.Collector {
 				Name: m.Name,
 				Help: m.Description,
 			},
-			m.Args,
+			m.Properties,
 		)
 	case Histogram:
 		return prometheus.NewHistogram(
@@ -55,7 +55,7 @@ func NewMetric(m *Metric) prometheus.Collector {
 				Name: m.Name,
 				Help: m.Description,
 			},
-			m.Args,
+			m.Properties,
 		)
 	case Summary:
 		return prometheus.NewSummary(

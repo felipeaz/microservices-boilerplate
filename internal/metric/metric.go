@@ -16,5 +16,5 @@ type Metric struct {
 	Name        string
 	Description string
 	Type        string
-	Args        []string
+	Properties  []string
 }
