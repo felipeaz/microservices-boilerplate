@@ -1,12 +1,12 @@
 package repository
 
 import (
-	"app/internal/metrics"
 	"context"
 
 	uuid "github.com/satori/go.uuid"
 
 	"app/internal/serviceB/domain"
+	"app/internal/serviceB/repository/metrics"
 	"app/internal/storage"
 )
 
@@ -29,13 +29,13 @@ type DependenciesNode struct {
 
 type repository struct {
 	deps    *DependenciesNode
-	metrics metrics.MetricCollector
+	metrics *metrics.Metrics
 }
 
 func New(deps *DependenciesNode) Repository {
 	return &repository{
 		deps:    deps,
-		metrics: metrics.NewMetricCollector(),
+		metrics: metrics.Initialize(),
 	}
 }
 

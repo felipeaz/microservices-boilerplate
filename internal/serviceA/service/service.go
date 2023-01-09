@@ -7,9 +7,9 @@ import (
 
 	"app/internal/constants"
 	"app/internal/logger"
-	"app/internal/metrics"
 	"app/internal/serviceA/domain"
 	"app/internal/serviceA/repository"
+	"app/internal/serviceA/service/metrics"
 )
 
 type Service interface {
@@ -27,13 +27,13 @@ type DependenciesNode struct {
 
 type service struct {
 	deps    *DependenciesNode
-	metrics metrics.MetricCollector
+	metrics *metrics.Metrics
 }
 
 func New(deps *DependenciesNode) Service {
 	return &service{
 		deps:    deps,
-		metrics: metrics.NewMetricCollector(),
+		metrics: metrics.Initialize(),
 	}
 }
 
