@@ -2,50 +2,48 @@ package metrics
 
 import (
 	"app/internal/metric"
-
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Metrics struct {
-	RequestLatency   prometheus.Collector
-	ResponseLatency  prometheus.Collector
-	HttpRequestCount prometheus.Collector
+	RequestLatency   metric.HistogramVec
+	ResponseLatency  metric.HistogramVec
+	HttpRequestCount metric.CounterVec
 }
 
 func Initialize() *Metrics {
 	return &Metrics{
-		RequestLatency:   metric.New(newResponseLatencyMetrics()),
-		ResponseLatency:  metric.New(newRequestLatencyMetrics()),
-		HttpRequestCount: metric.New(newHttpRequestCountMetrics()),
+		RequestLatency:   metric.NewHistogram(responseLatencyMetricProperties()),
+		ResponseLatency:  metric.NewHistogram(requestLatencyMetricProperties()),
+		HttpRequestCount: metric.NewCounter(httpRequestCountMetricProperties()),
 	}
 }
 
-func newResponseLatencyMetrics() metric.Properties {
+func responseLatencyMetricProperties() metric.Properties {
 	return metric.Properties{
 		Name:        "response_latency_in_seconds",
 		Namespace:   "service_a_gateway",
 		Description: "Describes http response time in seconds",
-		Type:        metric.HistogramVec,
+		Type:        metric.HistogramVecType,
 		Properties:  nil,
 	}
 }
 
-func newRequestLatencyMetrics() metric.Properties {
+func requestLatencyMetricProperties() metric.Properties {
 	return metric.Properties{
 		Name:        "request_latency_in_seconds",
 		Namespace:   "service_a_gateway",
 		Description: "Describes http request time in seconds",
-		Type:        metric.HistogramVec,
+		Type:        metric.HistogramVecType,
 		Properties:  nil,
 	}
 }
 
-func newHttpRequestCountMetrics() metric.Properties {
+func httpRequestCountMetricProperties() metric.Properties {
 	return metric.Properties{
 		Name:        "http_request_count",
 		Namespace:   "service_a_gateway",
 		Description: "Http requests processed",
-		Type:        metric.CounterVec,
+		Type:        metric.CounterVecType,
 		Properties:  nil,
 	}
 }
