@@ -2,6 +2,11 @@ package flags
 
 import "flag"
 
+const (
+	flagName = "debug"
+	usage    = "enable/disable debug mode"
+)
+
 type Flags struct {
 	Debug *bool
 }
@@ -9,7 +14,7 @@ type Flags struct {
 func Build() Flags {
 	var flags Flags
 
-	flags.Debug = flag.Bool("debug", false, "enable/disable debug mode")
+	flags.Debug = flag.Bool(flagName, false, usage)
 	flag.Parse()
 
 	return flags

@@ -40,7 +40,7 @@ func New(deps *DependenciesNode) Service {
 func (s *service) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 	resp, err := s.deps.Repository.GetAll(ctx)
 	if err != nil {
-		s.deps.Log.Error("failed to get all item a", err)
+		s.deps.Log.Error(FailedToGetAll, err)
 		return nil, err
 	}
 
@@ -50,13 +50,13 @@ func (s *service) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, error) {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.deps.Log.Error("failed to parse id to UUID", err)
+		s.deps.Log.Error(FailedToParseUUID, err)
 		return nil, constants.ErrCreatingUUIDFromString
 	}
 
 	resp, err := s.deps.Repository.GetByID(ctx, itemID)
 	if err != nil {
-		s.deps.Log.Error("failed to get item with id", itemID, err)
+		s.deps.Log.Error(FailedToGetByID, itemID, err)
 		return nil, err
 	}
 
@@ -66,7 +66,7 @@ func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, err
 func (s *service) Create(ctx context.Context, item *domain.ItemA) (*domain.ItemA, error) {
 	resp, err := s.deps.Repository.Insert(ctx, item)
 	if err != nil {
-		s.deps.Log.Error("failed to create item", item, err)
+		s.deps.Log.Error(FailedToCreate, item, err)
 		return nil, err
 	}
 
@@ -76,12 +76,12 @@ func (s *service) Create(ctx context.Context, item *domain.ItemA) (*domain.ItemA
 func (s *service) Update(ctx context.Context, id string, item *domain.ItemA) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.deps.Log.Error("failed to parse id to UUID", err)
+		s.deps.Log.Error(FailedToParseUUID, err)
 		return constants.ErrCreatingUUIDFromString
 	}
 
 	if err = s.deps.Repository.Update(ctx, itemID, item); err != nil {
-		s.deps.Log.Error("failed to update item", itemID, item, err)
+		s.deps.Log.Error(FailedToUpdate, itemID, item, err)
 		return err
 	}
 
@@ -91,12 +91,12 @@ func (s *service) Update(ctx context.Context, id string, item *domain.ItemA) err
 func (s *service) Delete(ctx context.Context, id string) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.deps.Log.Error("failed to parse id to UUID", err)
+		s.deps.Log.Error(FailedToParseUUID, err)
 		return constants.ErrCreatingUUIDFromString
 	}
 
 	if err = s.deps.Repository.Remove(ctx, itemID); err != nil {
-		s.deps.Log.Error("failed to delete item", itemID, err)
+		s.deps.Log.Error(FailedToDelete, itemID, err)
 		return err
 	}
 

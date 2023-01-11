@@ -10,6 +10,25 @@ import (
 
 const (
 	defaultMetricsPath = "/metrics"
+
+	// standard counter metric
+	defaultHttpCounterMetricName = "http_request_count"
+	defaultHttpCounterMetricHelp = "Number of http request"
+
+	// standard latency metric
+	defaultHttpLatencyMetricName = "http_request_latency_in_sec"
+	defaultHttpLatencyMetricHelp = "Http request latency in sec"
+
+	// metric properties
+	codeProperty    = "code"
+	methodProperty  = "method"
+	handlerProperty = "handler"
+	hostProperty    = "host"
+	urlProperty     = "url"
+
+	// errors
+	failedToRegisterStandardDurationMetric = "failed to register standard duration metric"
+	failedToRegisterStandardCounterMetric  = "failed to register standard counter metric"
 )
 
 type commonMetrics struct {
@@ -70,11 +89,11 @@ func (p *prometheus) registerRoutePath() {
 func (p *prometheus) registerMetrics() {
 	err := prom.Register(p.metrics.requestCounterMetric)
 	if err != nil {
-		log.Println("failed to register standard counter metric")
+		log.Println(failedToRegisterStandardCounterMetric)
 	}
 	err = prom.Register(p.metrics.requestDurationMetric)
 	if err != nil {
-		log.Println("failed to register standard duration metric")
+		log.Println(failedToRegisterStandardDurationMetric)
 	}
 }
 
@@ -82,17 +101,17 @@ func buildStandardMetrics() commonMetrics {
 	return commonMetrics{
 		requestCounterMetric: prom.NewCounterVec(
 			prom.CounterOpts{
-				Name: "http_request_count",
-				Help: "Number of http request",
+				Name: defaultHttpCounterMetricName,
+				Help: defaultHttpCounterMetricHelp,
 			},
-			[]string{"code", "method", "handler", "host", "url"},
+			[]string{codeProperty, methodProperty, handlerProperty, hostProperty, urlProperty},
 		),
 		requestDurationMetric: prom.NewHistogramVec(
 			prom.HistogramOpts{
-				Name: "http_request_latency_in_sec",
-				Help: "Http request latency in sec",
+				Name: defaultHttpLatencyMetricName,
+				Help: defaultHttpLatencyMetricHelp,
 			},
-			[]string{"code", "method", "url"},
+			[]string{codeProperty, methodProperty, urlProperty},
 		),
 	}
 }

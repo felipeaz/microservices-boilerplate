@@ -6,6 +6,10 @@ import (
 	"app/api"
 )
 
+const (
+	failedToInitializeServer = "failed to initialize server"
+)
+
 type Server interface {
 	Run(addr ...string)
 }
@@ -23,6 +27,6 @@ type server struct {
 func (s *server) Run(addr ...string) {
 	err := s.api.GetRouter().Run(addr...)
 	if err != nil {
-		log.Fatal("failed to initialize server")
+		log.Fatal(failedToInitializeServer)
 	}
 }

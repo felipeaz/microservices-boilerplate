@@ -61,7 +61,7 @@ func (h *Handler) Get(c *gin.Context) {
 // @Router      /b-items/{id} [get]
 func (h *Handler) Find(c *gin.Context) {
 	ctx := c.Request.Context()
-	id := c.Param("id")
+	id := c.Param(ParamID)
 	resp, err := h.deps.Service.GetOneByID(ctx, id)
 	if err != nil {
 		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
@@ -123,7 +123,7 @@ func (h *Handler) Update(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
-	id := c.Param("id")
+	id := c.Param(ParamID)
 	if err = h.deps.Service.Update(ctx, id, input); err != nil {
 		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
@@ -146,7 +146,7 @@ func (h *Handler) Update(c *gin.Context) {
 // @Router      /b-items/{id} [delete]
 func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
-	id := c.Param("id")
+	id := c.Param(ParamID)
 	if err := h.deps.Service.Delete(ctx, id); err != nil {
 		c.JSON(h.deps.HttpError.GetStatusCodeFromError(err), err)
 		return
