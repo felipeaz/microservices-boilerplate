@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 
@@ -12,6 +13,9 @@ import (
 
 const (
 	AllItemsKey = "all-items"
+
+	cachedQueryMetric = "cached"
+	dbQueryMetric     = "db"
 )
 
 type Repository interface {
@@ -40,11 +44,14 @@ func New(deps *DependenciesNode) Repository {
 }
 
 func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
+	startTime := time.Now()
 	cacheData, err := r.deps.Cache.Get(AllItemsKey)
 	if err != nil {
 		return nil, err
 	}
+
 	if cacheData != nil {
+		r.metrics.Latency.Observe(time.Since(startTime).Seconds(), cachedQueryMetric)
 		return domain.NewArrayFromBytes(cacheData)
 	}
 
@@ -57,15 +64,20 @@ func (r *repository) GetAll(ctx context.Context) ([]*domain.ItemA, error) {
 		return nil, err
 	}
 
+	r.metrics.Latency.Observe(time.Since(startTime).Seconds(), dbQueryMetric)
+
 	return itemArr, nil
 }
 
 func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemA, error) {
+	startTime := time.Now()
 	cacheData, err := r.deps.Cache.Get(id.String())
 	if err != nil {
 		return nil, err
 	}
+
 	if cacheData != nil {
+		r.metrics.Latency.Observe(time.Since(startTime).Seconds(), cachedQueryMetric)
 		return domain.NewFromBytes(cacheData)
 	}
 
@@ -78,10 +90,13 @@ func (r *repository) GetByID(ctx context.Context, id uuid.UUID) (*domain.ItemA, 
 		return nil, err
 	}
 
+	r.metrics.Latency.Observe(time.Since(startTime).Seconds(), dbQueryMetric)
+
 	return item, nil
 }
 
 func (r *repository) Insert(ctx context.Context, item *domain.ItemA) (*domain.ItemA, error) {
+	startTime := time.Now()
 	err := r.deps.Cache.Remove(AllItemsKey)
 	if err != nil {
 		return nil, err
@@ -91,23 +106,30 @@ func (r *repository) Insert(ctx context.Context, item *domain.ItemA) (*domain.It
 		return nil, err
 	}
 
+	r.metrics.Latency.Observe(time.Since(startTime).Seconds(), dbQueryMetric)
+
 	return item, nil
 }
 
 func (r *repository) Update(ctx context.Context, id uuid.UUID, item *domain.ItemA) error {
+	startTime := time.Now()
 	err := r.deps.Cache.Remove(id.String())
 	if err != nil {
 		return err
 	}
+
 	err = r.deps.Cache.Remove(AllItemsKey)
 	if err != nil {
 		return err
 	}
+
+	r.metrics.Latency.Observe(time.Since(startTime).Seconds(), dbQueryMetric)
 
 	return r.deps.Database.Update(ctx, id, item)
 }
 
 func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
+	startTime := time.Now()
 	err := r.deps.Cache.Remove(id.String())
 	if err != nil {
 		return err
@@ -116,6 +138,8 @@ func (r *repository) Remove(ctx context.Context, id uuid.UUID) error {
 	if err != nil {
 		return err
 	}
+
+	r.metrics.Latency.Observe(time.Since(startTime).Seconds(), dbQueryMetric)
 
 	return r.deps.Database.Delete(ctx, id, domain.ItemA{})
 }
