@@ -8,7 +8,8 @@ const (
 	NameProperty        = "repository_b_latency_in_seconds"
 	NamespaceProperty   = "repository_b_gateway"
 	DescriptionProperty = "Describes http response time in seconds"
-	queryTypeProperty   = "queryType"
+
+	queryTypePropertyKey = "queryType"
 )
 
 type Metrics struct {
@@ -27,6 +28,6 @@ func latencyMetricProperties() metric.Properties {
 		Namespace:   NamespaceProperty,
 		Description: DescriptionProperty,
 		Type:        metric.HistogramVecType,
-		Properties:  []string{queryTypeProperty},
+		Properties:  []string{queryTypePropertyKey},
 	}
 }
