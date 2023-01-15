@@ -4,46 +4,31 @@ import (
 	"app/internal/metric"
 )
 
+const (
+	NameProperty        = "error_count"
+	NamespaceProperty   = "service_b_gateway"
+	DescriptionProperty = "Http requests received counter"
+
+	errorPropertyKey      = "error"
+	statusCodePropertyKey = "status"
+)
+
 type Metrics struct {
-	RequestLatency   metric.HistogramVec
-	ResponseLatency  metric.HistogramVec
-	HttpRequestCount metric.CounterVec
+	ErrorCount metric.CounterVec
 }
 
 func Initialize() *Metrics {
 	return &Metrics{
-		RequestLatency:   metric.NewHistogram(responseLatencyMetricProperties()),
-		ResponseLatency:  metric.NewHistogram(requestLatencyMetricProperties()),
-		HttpRequestCount: metric.NewCounter(httpRequestCountMetricProperties()),
+		ErrorCount: metric.NewCounter(errorCountMetricProperties()),
 	}
 }
 
-func responseLatencyMetricProperties() metric.Properties {
+func errorCountMetricProperties() metric.Properties {
 	return metric.Properties{
-		Name:        "response_latency_in_seconds",
-		Namespace:   "service_b_gateway",
-		Description: "Describes http response time in seconds",
-		Type:        metric.HistogramVecType,
-		Properties:  nil,
-	}
-}
-
-func requestLatencyMetricProperties() metric.Properties {
-	return metric.Properties{
-		Name:        "request_latency_in_seconds",
-		Namespace:   "service_b_gateway",
-		Description: "Describes http request time in seconds",
-		Type:        metric.HistogramVecType,
-		Properties:  nil,
-	}
-}
-
-func httpRequestCountMetricProperties() metric.Properties {
-	return metric.Properties{
-		Name:        "http_request_count",
-		Namespace:   "service_b_gateway",
-		Description: "Http requests processed",
+		Name:        NameProperty,
+		Namespace:   NamespaceProperty,
+		Description: DescriptionProperty,
 		Type:        metric.CounterVecType,
-		Properties:  nil,
+		Properties:  []string{errorPropertyKey, statusCodePropertyKey},
 	}
 }

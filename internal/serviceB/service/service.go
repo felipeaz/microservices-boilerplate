@@ -40,7 +40,7 @@ func New(config *DependenciesNode) Service {
 func (s *service) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 	resp, err := s.deps.Repository.GetAll(ctx)
 	if err != nil {
-		s.deps.Log.Error(FailedToGetAll, err)
+		s.handleError(err, FailedToGetAll)
 		return nil, err
 	}
 
@@ -50,13 +50,13 @@ func (s *service) GetAll(ctx context.Context) ([]*domain.ItemB, error) {
 func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemB, error) {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.deps.Log.Error(FailedToParseUUID, err)
+		s.handleError(err, FailedToParseUUID, id)
 		return nil, constants.ErrCreatingUUIDFromString
 	}
 
 	resp, err := s.deps.Repository.GetByID(ctx, itemID)
 	if err != nil {
-		s.deps.Log.Error(FailedToGetByID, itemID, err)
+		s.handleError(err, FailedToGetByID, itemID)
 		return nil, err
 	}
 
@@ -66,7 +66,7 @@ func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemB, err
 func (s *service) Create(ctx context.Context, item *domain.ItemB) (*domain.ItemB, error) {
 	resp, err := s.deps.Repository.Insert(ctx, item)
 	if err != nil {
-		s.deps.Log.Error(FailedToCreate, item, err)
+		s.handleError(err, FailedToCreate, item)
 		return nil, err
 	}
 
@@ -76,12 +76,12 @@ func (s *service) Create(ctx context.Context, item *domain.ItemB) (*domain.ItemB
 func (s *service) Update(ctx context.Context, id string, item *domain.ItemB) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.deps.Log.Error(FailedToParseUUID, err)
+		s.handleError(err, FailedToParseUUID, id)
 		return constants.ErrCreatingUUIDFromString
 	}
 
 	if err = s.deps.Repository.Update(ctx, itemID, item); err != nil {
-		s.deps.Log.Error(FailedToUpdate, itemID, item, err)
+		s.handleError(err, FailedToUpdate, itemID, item)
 		return err
 	}
 
@@ -91,14 +91,19 @@ func (s *service) Update(ctx context.Context, id string, item *domain.ItemB) err
 func (s *service) Delete(ctx context.Context, id string) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
-		s.deps.Log.Error(FailedToParseUUID, err)
+		s.handleError(err, FailedToParseUUID, id)
 		return constants.ErrCreatingUUIDFromString
 	}
 
 	if err = s.deps.Repository.Remove(ctx, itemID); err != nil {
-		s.deps.Log.Error(FailedToDelete, itemID, err)
+		s.handleError(err, FailedToDelete, itemID)
 		return err
 	}
 
 	return nil
+}
+
+func (s *service) handleError(err error, logMessage string, logArgs ...interface{}) {
+	s.deps.Log.Error(logMessage, err, logArgs)
+	s.metrics.ErrorCount.Increment(err.Error())
 }
