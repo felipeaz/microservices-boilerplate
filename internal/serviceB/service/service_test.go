@@ -1,13 +1,13 @@
-package service_test
+package service
 
 import (
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/mock"
 
-	"app/internal/serviceB/service"
 	commonAssertion "app/internal/test/assertion/common"
 	errorsAssertion "app/internal/test/assertion/errors"
 	assertion "app/internal/test/assertion/serviceB"
@@ -24,14 +24,14 @@ var _ = Describe("Service", func() {
 	var (
 		logMock  *pkgMock.Logger
 		repoMock *repositoryMock.Repository
-		s        service.Service
+		s        Service
 	)
 
 	BeforeEach(func() {
 		logMock = pkgMock.NewLogger(GinkgoT())
 		repoMock = repositoryMock.NewRepository(GinkgoT())
-		s = service.New(
-			&service.DependenciesNode{
+		s = New(
+			&DependenciesNode{
 				Log:        logMock,
 				Repository: repoMock,
 			},
@@ -70,8 +70,13 @@ var _ = Describe("Service", func() {
 					repoMock.On("GetAll", commonAssertion.EmptyCtx).
 						Return(nil, errorsAssertion.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, errorsAssertion.ErrGeneric).
-						Once()
+					logMock.On(
+						"Error",
+						commonAssertion.EmptyCtx,
+						errorsAssertion.ErrGeneric,
+						FailedToGetAll,
+						mock.Anything,
+					).Once()
 
 					resp, err := s.GetAll(commonAssertion.EmptyCtx)
 
@@ -102,8 +107,12 @@ var _ = Describe("Service", func() {
 					repoMock.On("GetByID", commonAssertion.EmptyCtx, assertion.SampleID).
 						Return(nil, errorsAssertion.ErrNotFound).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.SampleID, errorsAssertion.ErrNotFound).
-						Once()
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
+						errorsAssertion.ErrNotFound,
+						FailedToGetByID,
+						logrus.Fields{itemIDKey: assertion.SampleID},
+					).Once()
 
 					resp, err := s.GetOneByID(commonAssertion.EmptyCtx, assertion.SampleID.String())
 
@@ -114,10 +123,11 @@ var _ = Describe("Service", func() {
 			})
 			When("Fails to parse UUID from string", func() {
 				It("Should return an error", func() {
-					logMock.On(
-						"Error",
-						mock.Anything,
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
 						assertion.NewErrIncorrectIDLength(assertion.InvalidIDString),
+						FailedToParseUUID,
+						logrus.Fields{requestIDKey: assertion.InvalidIDString},
 					).Once()
 
 					resp, err := s.GetOneByID(commonAssertion.EmptyCtx, assertion.InvalidIDString)
@@ -151,9 +161,12 @@ var _ = Describe("Service", func() {
 					repoMock.On("Insert", commonAssertion.EmptyCtx, itemInput).
 						Return(nil, errorsAssertion.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, itemInput, errorsAssertion.ErrGeneric).
-						Return().
-						Once()
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
+						errorsAssertion.ErrGeneric,
+						FailedToCreate,
+						logrus.Fields{itemObjKey: itemInput},
+					).Once()
 
 					resp, err := s.Create(commonAssertion.EmptyCtx, itemInput)
 
@@ -184,9 +197,12 @@ var _ = Describe("Service", func() {
 					repoMock.On("Update", commonAssertion.EmptyCtx, assertion.SampleID, inputItem).
 						Return(errorsAssertion.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.SampleID, inputItem, errorsAssertion.ErrGeneric).
-						Return().
-						Once()
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
+						errorsAssertion.ErrGeneric,
+						FailedToUpdate,
+						logrus.Fields{itemIDKey: assertion.SampleID, itemObjKey: inputItem},
+					).Once()
 
 					err := s.Update(commonAssertion.EmptyCtx, idString, inputItem)
 					Expect(err).Should(HaveOccurred())
@@ -197,10 +213,11 @@ var _ = Describe("Service", func() {
 				It("Should return an error", func() {
 					idString := assertion.InvalidIDString
 					inputItem := assertion.NewItemWithID(idString)
-					logMock.On(
-						"Error",
-						mock.Anything,
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
 						assertion.NewErrIncorrectIDLength(assertion.InvalidIDString),
+						FailedToParseUUID,
+						logrus.Fields{requestIDKey: idString},
 					).Once()
 
 					err := s.Update(commonAssertion.EmptyCtx, assertion.InvalidIDString, inputItem)
@@ -227,9 +244,12 @@ var _ = Describe("Service", func() {
 					repoMock.On("Remove", commonAssertion.EmptyCtx, assertion.SampleID).
 						Return(errorsAssertion.ErrGeneric).
 						Once()
-					logMock.On("Error", mock.Anything, assertion.SampleID, errorsAssertion.ErrGeneric).
-						Return().
-						Once()
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
+						errorsAssertion.ErrGeneric,
+						FailedToDelete,
+						logrus.Fields{itemIDKey: assertion.SampleID},
+					).Once()
 
 					err := s.Delete(commonAssertion.EmptyCtx, assertion.SampleID.String())
 					Expect(err).Should(HaveOccurred())
@@ -238,10 +258,11 @@ var _ = Describe("Service", func() {
 			})
 			When("Fails to parse UUID from string", func() {
 				It("Should return an error", func() {
-					logMock.On(
-						"Error",
-						mock.Anything,
+					logMock.On("Error",
+						commonAssertion.EmptyCtx,
 						assertion.NewErrIncorrectIDLength(assertion.InvalidIDString),
+						FailedToParseUUID,
+						logrus.Fields{requestIDKey: assertion.InvalidIDString},
 					).Once()
 
 					err := s.Delete(commonAssertion.EmptyCtx, assertion.InvalidIDString)

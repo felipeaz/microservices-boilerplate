@@ -12,6 +12,6 @@ var (
 	DebugLogMessage = "Debug message"
 	LogDir          = "logs"
 
-	LogTime     = time.Date(1997, 12, 31, 10, 00, 00, 00, time.UTC)
+	LogTime     = time.Now().UTC()
 	LogFileName = fmt.Sprintf("%s.txt", LogTime.Format("01-02-2006"))
 )
