@@ -15,6 +15,11 @@ const (
 	dirPrefix         = "logs"
 	timestampFieldKey = "@timestamp"
 	messageFieldKey   = "message"
+
+	logPathFormat     = "%s/%s"
+	logFileNameFormat = "%s/%s.txt"
+
+	errorCreatingFile = "failed to initialize log file"
 )
 
 // Logger interface abstracts the logger package and offers an interface with three kind of logger
@@ -79,18 +84,18 @@ func (l logger) Debug(ctx context.Context, msg string, fields log.Fields) {
 func newLogFile(t time.Time, logPath string) io.Writer {
 	err := os.MkdirAll(logPath, os.ModePerm)
 	if err != nil {
-		log.Println("failed to initialize log file", err)
+		log.Println(errorCreatingFile, err)
 		return os.Stdout
 	}
 
-	fileName := fmt.Sprintf("%s/%s.txt", logPath, t.UTC().Format("01-02-2006"))
+	fileName := fmt.Sprintf(logFileNameFormat, logPath, t.UTC().Format("01-02-2006"))
 	logFile, _ := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	return logFile
 }
 
 func getLogPath() string {
-	return fmt.Sprintf("%s/%s", getProjectRootDirectory(), dirPrefix)
+	return fmt.Sprintf(logPathFormat, getProjectRootDirectory(), dirPrefix)
 }
 
 func getProjectRootDirectory() string {

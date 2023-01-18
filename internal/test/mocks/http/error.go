@@ -10,7 +10,7 @@ type Error struct {
 }
 
 // GetStatusCodeFromError provides a mock function with given fields: err
-func (_m *Error) GetStatusCodeFromError(err error) int {
+func (_m *Error) GetStatus(err error) int {
 	ret := _m.Called(err)
 
 	var r0 int

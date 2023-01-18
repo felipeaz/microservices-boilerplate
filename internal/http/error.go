@@ -7,7 +7,7 @@ import (
 )
 
 type Error interface {
-	GetStatusCodeFromError(err error) int
+	GetStatus(err error) int
 }
 
 func NewHttpError() Error {
@@ -17,11 +17,10 @@ func NewHttpError() Error {
 }
 
 type httpError struct {
-	errorStatusMap  map[error]int
-	errorMessageMap map[int]string
+	errorStatusMap map[error]int
 }
 
-func (h *httpError) GetStatusCodeFromError(err error) int {
+func (h *httpError) GetStatus(err error) int {
 	status, ok := h.errorStatusMap[err]
 	if !ok {
 		return http.StatusInternalServerError
