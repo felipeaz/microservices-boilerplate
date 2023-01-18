@@ -1,4 +1,4 @@
-package http_test
+package http
 
 import (
 	"net/http"
@@ -8,7 +8,6 @@ import (
 	. "github.com/onsi/gomega"
 	"gorm.io/gorm"
 
-	httpService "app/internal/http"
 	assertionErrors "app/internal/test/assertion/errors"
 )
 
@@ -19,11 +18,11 @@ func TestError(t *testing.T) {
 
 var _ = Describe("Error", func() {
 	var (
-		httpError httpService.Error
+		httpError Error
 	)
 
 	BeforeEach(func() {
-		httpError = httpService.NewHttpError()
+		httpError = NewHttpError()
 	})
 
 	Context("Getting status code from error", func() {

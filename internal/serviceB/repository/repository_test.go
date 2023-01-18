@@ -1,4 +1,4 @@
-package repository_test
+package repository
 
 import (
 	"testing"
@@ -7,7 +7,6 @@ import (
 	. "github.com/onsi/gomega"
 
 	"app/internal/serviceB/domain"
-	"app/internal/serviceB/repository"
 	commonAssertion "app/internal/test/assertion/common"
 	errorsAssertion "app/internal/test/assertion/errors"
 	assertion "app/internal/test/assertion/serviceB"
@@ -23,14 +22,14 @@ var _ = Describe("Repository", func() {
 	var (
 		cacheMock    *storageMock.Cache
 		databaseMock *storageMock.Database
-		repo         repository.Repository
+		repo         Repository
 	)
 
 	BeforeEach(func() {
 		cacheMock = storageMock.NewCache(GinkgoT())
 		databaseMock = storageMock.NewDatabase(GinkgoT())
-		repo = repository.New(
-			&repository.DependenciesNode{
+		repo = New(
+			&DependenciesNode{
 				Database: databaseMock,
 				Cache:    cacheMock,
 			},
@@ -44,7 +43,7 @@ var _ = Describe("Repository", func() {
 					It("Should return an item from cache", func() {
 						expectedItemArr := assertion.ArrayOfItem
 						itemBrrInBytes := assertion.ArrayOfItemBInBytes(expectedItemArr)
-						cacheMock.On("Get", repository.AllItemsKey).
+						cacheMock.On("Get", AllItemsKey).
 							Return(itemBrrInBytes, nil).
 							Once()
 
@@ -56,7 +55,7 @@ var _ = Describe("Repository", func() {
 				})
 				When("Fails", func() {
 					It("Should return an error", func() {
-						cacheMock.On("Get", repository.AllItemsKey).
+						cacheMock.On("Get", AllItemsKey).
 							Return(nil, errorsAssertion.ErrGeneric).
 							Once()
 
@@ -72,13 +71,13 @@ var _ = Describe("Repository", func() {
 				When("Succeeds", func() {
 					It("Should return an item", func() {
 						var emptyArr []*domain.ItemB
-						cacheMock.On("Get", repository.AllItemsKey).
+						cacheMock.On("Get", AllItemsKey).
 							Return(nil, nil).
 							Once()
 						databaseMock.On("Select", commonAssertion.EmptyCtx, &emptyArr).
 							Return(nil).
 							Once()
-						cacheMock.On("Set", repository.AllItemsKey, emptyArr).
+						cacheMock.On("Set", AllItemsKey, emptyArr).
 							Return(nil).
 							Once()
 
@@ -90,7 +89,7 @@ var _ = Describe("Repository", func() {
 				When("Fails to get item from Database", func() {
 					It("Should return an error", func() {
 						var emptyArr []*domain.ItemB
-						cacheMock.On("Get", repository.AllItemsKey).
+						cacheMock.On("Get", AllItemsKey).
 							Return(nil, nil).
 							Once()
 						databaseMock.On("Select", commonAssertion.EmptyCtx, &emptyArr).
@@ -107,13 +106,13 @@ var _ = Describe("Repository", func() {
 				When("Fails to set cache", func() {
 					It("Should return an error", func() {
 						var emptyArr []*domain.ItemB
-						cacheMock.On("Get", repository.AllItemsKey).
+						cacheMock.On("Get", AllItemsKey).
 							Return(nil, nil).
 							Once()
 						databaseMock.On("Select", commonAssertion.EmptyCtx, &emptyArr).
 							Return(nil).
 							Once()
-						cacheMock.On("Set", repository.AllItemsKey, emptyArr).
+						cacheMock.On("Set", AllItemsKey, emptyArr).
 							Return(errorsAssertion.ErrGeneric).
 							Once()
 
@@ -226,7 +225,7 @@ var _ = Describe("Repository", func() {
 				It("Should return an error", func() {
 					inputItem := assertion.NewItemWithID(assertion.SampleID.String())
 					expectedItem := assertion.NewItemFromInput(inputItem)
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(nil).
 						Once()
 					databaseMock.On("Create", commonAssertion.EmptyCtx, inputItem).
@@ -243,7 +242,7 @@ var _ = Describe("Repository", func() {
 			When("Fails to insert item", func() {
 				It("Should return an error", func() {
 					inputItem := assertion.NewItemWithID(assertion.SampleID.String())
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(nil).
 						Once()
 					databaseMock.On("Create", commonAssertion.EmptyCtx, inputItem).
@@ -260,7 +259,7 @@ var _ = Describe("Repository", func() {
 			When("Fail to remove all cached items", func() {
 				It("Should return an error", func() {
 					inputItem := assertion.NewItemWithID(assertion.SampleID.String())
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(errorsAssertion.ErrGeneric).
 						Once()
 
@@ -280,7 +279,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
 						Return(nil).
 						Once()
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(nil).
 						Once()
 					databaseMock.On("Update", commonAssertion.EmptyCtx, assertion.SampleID, inputItem).
@@ -298,7 +297,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
 						Return(nil).
 						Once()
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(nil).
 						Once()
 					databaseMock.On("Update", commonAssertion.EmptyCtx, assertion.SampleID, inputItem).
@@ -330,7 +329,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
 						Return(nil).
 						Once()
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(errorsAssertion.ErrGeneric).
 						Once()
 
@@ -348,7 +347,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
 						Return(nil).
 						Once()
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(nil).
 						Once()
 					databaseMock.On("Delete", commonAssertion.EmptyCtx, assertion.SampleID, domain.ItemB{}).
@@ -377,7 +376,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
 						Return(nil).
 						Once()
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(errorsAssertion.ErrGeneric).
 						Once()
 
@@ -392,7 +391,7 @@ var _ = Describe("Repository", func() {
 					cacheMock.On("Remove", assertion.SampleID.String()).
 						Return(nil).
 						Once()
-					cacheMock.On("Remove", repository.AllItemsKey).
+					cacheMock.On("Remove", AllItemsKey).
 						Return(nil).
 						Once()
 					databaseMock.On("Delete", commonAssertion.EmptyCtx, assertion.SampleID, domain.ItemB{}).

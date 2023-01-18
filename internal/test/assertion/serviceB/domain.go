@@ -12,6 +12,6 @@ func ItemBInBytes(item *domain.ItemB) []byte {
 }
 
 func ArrayOfItemBInBytes(arr []*domain.ItemB) []byte {
-	b, _ := json.Marshal(ArrayOfItem)
+	b, _ := json.Marshal(arr)
 	return b
 }
