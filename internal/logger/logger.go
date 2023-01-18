@@ -84,7 +84,7 @@ func (l logger) Debug(ctx context.Context, msg string, fields log.Fields) {
 func newLogFile(t time.Time, logPath string) io.Writer {
 	err := os.MkdirAll(logPath, os.ModePerm)
 	if err != nil {
-		log.Println(errorCreatingFile, err)
+		log.WithError(err).Warn(errorCreatingFile)
 		return os.Stdout
 	}
 

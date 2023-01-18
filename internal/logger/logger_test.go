@@ -67,6 +67,15 @@ var _ = Describe("Log", func() {
 			})
 		})
 	})
+	Context("Failed to create dir", func() {
+		When("creating a new log dir", func() {
+			It("Should return stdout due to file error", func() {
+				actual := newLogFile(assertion.LogTime, "")
+
+				Expect(actual).To(BeEquivalentTo(os.Stdout))
+			})
+		})
+	})
 })
 
 var _ = Describe("Dir", func() {
