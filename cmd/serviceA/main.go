@@ -38,22 +38,26 @@ func main() {
 		},
 	)
 
-	server.New(
-		handler.New(
-			&handler.DependenciesNode{
-				Service: service.New(
-					&service.DependenciesNode{
-						Log: cfg.Logger,
-						Repository: repository.New(
-							&repository.DependenciesNode{
-								Database: cfg.Database,
-								Cache:    cfg.Cache,
-							},
-						),
-					},
-				),
-				Router: cfg.Router,
-			},
-		),
-	).Run(cfg.ServicePort)
+	repo := repository.New(
+		&repository.DependenciesNode{
+			Database: cfg.Database,
+			Cache:    cfg.Cache,
+		},
+	)
+
+	api := service.New(
+		&service.DependenciesNode{
+			Log:        cfg.Logger,
+			Repository: repo,
+		},
+	)
+
+	handlerGateway := handler.New(
+		&handler.DependenciesNode{
+			Service: api,
+			Router:  cfg.Router,
+		},
+	)
+
+	server.New(handlerGateway).Run(cfg.ServicePort)
 }
