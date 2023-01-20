@@ -1,32 +1,23 @@
 package server
 
 import (
-	"log"
-
-	"app/api"
-)
-
-const (
-	failedToInitializeServer = "failed to initialize server"
+	"github.com/gin-gonic/gin"
 )
 
 type Server interface {
-	Run(addr ...string)
+	Run(addr ...string) error
 }
 
-func New(api api.Api) Server {
+func New(httpEngine *gin.Engine) Server {
 	return &server{
-		api: api,
+		httpEngine: httpEngine,
 	}
 }
 
 type server struct {
-	api api.Api
+	httpEngine *gin.Engine
 }
 
-func (s *server) Run(addr ...string) {
-	err := s.api.GetRouter().Run(addr...)
-	if err != nil {
-		log.Fatal(failedToInitializeServer)
-	}
+func (s *server) Run(addr ...string) error {
+	return s.httpEngine.Run(addr...)
 }

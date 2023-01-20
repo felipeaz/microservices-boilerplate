@@ -1,6 +1,8 @@
 package api
 
+import "github.com/gin-gonic/gin"
+
 type Api interface {
 	RegisterRoutes()
-	GetRouter() Router
+	GetRouter() *gin.Engine
 }

@@ -59,5 +59,8 @@ func main() {
 		},
 	)
 
-	server.New(handlerGateway).Run(cfg.ServicePort)
+	err := server.New(handlerGateway.GetRouter()).Run(cfg.ServicePort)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
