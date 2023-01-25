@@ -4,10 +4,10 @@ import (
 	"app/build/env"
 	"app/build/flags"
 	"app/build/router"
+	"app/infra/cache/redis"
+	"app/infra/database/postgresql"
 	"app/internal/logger"
 	"app/internal/storage"
-	"app/third_party/cache/redis"
-	"app/third_party/database/postgresql"
 	"github.com/gin-gonic/gin"
 )
 
