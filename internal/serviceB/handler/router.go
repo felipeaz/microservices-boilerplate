@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"app/api"
+	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) GetRouter() api.Router {
+func (h *Handler) GetRouter() *gin.Engine {
 	return h.deps.Router
 }
 
