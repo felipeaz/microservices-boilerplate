@@ -38,6 +38,10 @@ func New(host, port string) storage.Cache {
 }
 
 func (r *redis) connect() {
+	if r.conn != nil {
+		return
+	}
+
 	conn, err := redigo.Dial("tcp", r.getHost())
 	if err != nil {
 		log.Fatalf(failedToConnectToRedisServer, err)
