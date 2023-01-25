@@ -13,6 +13,13 @@ import (
 	"app/internal/storage"
 )
 
+const (
+	dbInfo = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=UTC"
+
+	failedToConnectToPostgresql = "failed to connect to postgresql: %v\n"
+	failedToRetrieveDBInstance  = "failed to retrieve db instance: %v\n"
+)
+
 type postgresql struct {
 	host     string
 	port     string
@@ -46,12 +53,12 @@ func (p *postgresql) connect() {
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed to connect to postgresql: %v\n", err)
+		log.Fatalf(failedToConnectToPostgresql, err)
 	}
 
 	db, err := conn.DB()
 	if err != nil {
-		log.Fatalf("failed to retrieve db instance: %v\n", err)
+		log.Fatalf(failedToRetrieveDBInstance, err)
 	}
 
 	p.conn = conn
@@ -83,14 +90,5 @@ func (p *postgresql) Delete(ctx context.Context, id uuid.UUID, obj interface{}) 
 }
 
 func (p *postgresql) getDBInfo() string {
-	return fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=UTC",
-		p.host, p.port, p.username, p.password, p.dbName,
-	)
-}
-
-func (p *postgresql) closeConnection() {
-	if err := p.db.Close(); err != nil {
-		log.Println("failed to close sql db connection", err)
-	}
+	return fmt.Sprintf(dbInfo, p.host, p.port, p.username, p.password, p.dbName)
 }

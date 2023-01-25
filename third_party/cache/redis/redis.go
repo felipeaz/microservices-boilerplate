@@ -14,7 +14,6 @@ const (
 	failedToSetKey               = "failed to set key %s, value %s: %v\n"
 	failedToGetKey               = "failed to get key %s: %v\n"
 	failedToRemoveKey            = "failed to remove key %s: %v\n"
-	failedToCloseConnection      = "failed to close connection:"
 
 	deleteAction = "DEL"
 	getAction    = "GET"
@@ -76,9 +75,4 @@ func (r *redis) Remove(key string) error {
 
 func (r *redis) getHost() string {
 	return fmt.Sprintf("%s:%s", r.addr, r.port)
-}
-
-func (r *redis) closeConnection(conn redigo.Conn) {
-	err := conn.Close()
-	log.Println(failedToCloseConnection, err)
 }
