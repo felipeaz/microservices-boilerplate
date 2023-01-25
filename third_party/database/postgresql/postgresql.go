@@ -19,19 +19,28 @@ type postgresql struct {
 	username string
 	password string
 	dbName   string
+	conn     *gorm.DB
+	db       *sql.DB
 }
 
 func New(host, port, user, pass, dbName string) storage.Database {
-	return &postgresql{
+	pgsql := &postgresql{
 		host:     host,
 		port:     port,
 		username: user,
 		password: pass,
 		dbName:   dbName,
 	}
+	pgsql.connect()
+
+	return pgsql
 }
 
-func (p *postgresql) connect() (*gorm.DB, *sql.DB) {
+func (p *postgresql) connect() {
+	if p.conn != nil {
+		return
+	}
+
 	conn, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  p.getDBInfo(),
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
@@ -39,47 +48,38 @@ func (p *postgresql) connect() (*gorm.DB, *sql.DB) {
 	if err != nil {
 		log.Fatalf("failed to connect to postgresql: %v\n", err)
 	}
+
 	db, err := conn.DB()
 	if err != nil {
 		log.Fatalf("failed to retrieve db instance: %v\n", err)
 	}
-	return conn, db
+
+	p.conn = conn
+	p.db = db
 }
 
 func (p *postgresql) Create(ctx context.Context, obj interface{}) error {
-	conn, db := p.connect()
-	defer p.closeConnection(db)
-	return conn.WithContext(ctx).Create(obj).Error
+	return p.conn.WithContext(ctx).Create(obj).Error
 }
 
 func (p *postgresql) Update(ctx context.Context, id uuid.UUID, obj interface{}) error {
-	conn, db := p.connect()
-	defer p.closeConnection(db)
-	return conn.WithContext(ctx).Where("id = ?", id).Updates(obj).Error
+	return p.conn.WithContext(ctx).Where("id = ?", id).Updates(obj).Error
 }
 
 func (p *postgresql) Set(ctx context.Context, obj interface{}, field string, value interface{}) error {
-	conn, db := p.connect()
-	defer p.closeConnection(db)
-	return conn.WithContext(ctx).Model(obj).UpdateColumn(field, value).Error
+	return p.conn.WithContext(ctx).Model(obj).UpdateColumn(field, value).Error
 }
 
 func (p *postgresql) Select(ctx context.Context, obj interface{}) error {
-	conn, db := p.connect()
-	defer p.closeConnection(db)
-	return conn.WithContext(ctx).Find(obj).Error
+	return p.conn.WithContext(ctx).Find(obj).Error
 }
 
 func (p *postgresql) Raw(ctx context.Context, query string, obj interface{}) error {
-	conn, db := p.connect()
-	defer p.closeConnection(db)
-	return conn.WithContext(ctx).Raw(query).Scan(obj).Error
+	return p.conn.WithContext(ctx).Raw(query).Scan(obj).Error
 }
 
 func (p *postgresql) Delete(ctx context.Context, id uuid.UUID, obj interface{}) error {
-	conn, db := p.connect()
-	defer p.closeConnection(db)
-	return conn.WithContext(ctx).Where("id = ?", id).Delete(obj).Error
+	return p.conn.WithContext(ctx).Where("id = ?", id).Delete(obj).Error
 }
 
 func (p *postgresql) getDBInfo() string {
@@ -89,8 +89,8 @@ func (p *postgresql) getDBInfo() string {
 	)
 }
 
-func (p *postgresql) closeConnection(db *sql.DB) {
-	if err := db.Close(); err != nil {
+func (p *postgresql) closeConnection() {
+	if err := p.db.Close(); err != nil {
 		log.Println("failed to close sql db connection", err)
 	}
 }
