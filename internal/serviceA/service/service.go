@@ -6,7 +6,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 
-	"app/internal/constants"
+	"app/internal/errors"
 	"app/internal/logger"
 	"app/internal/serviceA/domain"
 	"app/internal/serviceA/repository"
@@ -59,7 +59,7 @@ func (s *service) GetOneByID(ctx context.Context, id string) (*domain.ItemA, err
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.handleError(ctx, err, FailedToParseUUID, logrus.Fields{requestIDKey: id})
-		return nil, constants.ErrCreatingUUIDFromString
+		return nil, errors.ErrCreatingUUIDFromString
 	}
 
 	resp, err := s.deps.Repository.GetByID(ctx, itemID)
@@ -85,7 +85,7 @@ func (s *service) Update(ctx context.Context, id string, item *domain.ItemA) err
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.handleError(ctx, err, FailedToParseUUID, logrus.Fields{requestIDKey: id})
-		return constants.ErrCreatingUUIDFromString
+		return errors.ErrCreatingUUIDFromString
 	}
 
 	if err = s.deps.Repository.Update(ctx, itemID, item); err != nil {
@@ -100,7 +100,7 @@ func (s *service) Delete(ctx context.Context, id string) error {
 	itemID, err := uuid.FromString(id)
 	if err != nil {
 		s.handleError(ctx, err, FailedToParseUUID, logrus.Fields{requestIDKey: id})
-		return constants.ErrCreatingUUIDFromString
+		return errors.ErrCreatingUUIDFromString
 	}
 
 	if err = s.deps.Repository.Remove(ctx, itemID); err != nil {

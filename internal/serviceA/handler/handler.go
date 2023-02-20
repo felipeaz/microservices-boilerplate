@@ -3,16 +3,15 @@ package handler
 import (
 	"net/http"
 
-	httpService "app/internal/http"
+	"app/internal/errors"
 	"app/internal/serviceA/domain"
 	"app/internal/serviceA/service"
 	"github.com/gin-gonic/gin"
 )
 
 type DependenciesNode struct {
-	Service   service.Service
-	HttpError httpService.Error
-	Router    *gin.Engine
+	Service service.Service
+	Router  *gin.Engine
 }
 
 type Handler struct {
@@ -40,7 +39,7 @@ func (h *Handler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 	resp, err := h.deps.Service.GetAll(ctx)
 	if err != nil {
-		c.JSON(h.deps.HttpError.GetStatus(err), err)
+		c.JSON(errors.GetStatus(err), err)
 		return
 	}
 
@@ -64,7 +63,7 @@ func (h *Handler) Find(c *gin.Context) {
 	id := c.Param(ParamID)
 	resp, err := h.deps.Service.GetOneByID(ctx, id)
 	if err != nil {
-		c.JSON(h.deps.HttpError.GetStatus(err), err)
+		c.JSON(errors.GetStatus(err), err)
 		return
 	}
 
@@ -93,7 +92,7 @@ func (h *Handler) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 	obj, err := h.deps.Service.Create(ctx, input)
 	if err != nil {
-		c.JSON(h.deps.HttpError.GetStatus(err), err)
+		c.JSON(errors.GetStatus(err), err)
 		return
 	}
 
@@ -124,7 +123,7 @@ func (h *Handler) Update(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param(ParamID)
 	if err = h.deps.Service.Update(ctx, id, input); err != nil {
-		c.JSON(h.deps.HttpError.GetStatus(err), err)
+		c.JSON(errors.GetStatus(err), err)
 		return
 	}
 
@@ -147,7 +146,7 @@ func (h *Handler) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
 	id := c.Param(ParamID)
 	if err := h.deps.Service.Delete(ctx, id); err != nil {
-		c.JSON(h.deps.HttpError.GetStatus(err), err)
+		c.JSON(errors.GetStatus(err), err)
 		return
 	}
 

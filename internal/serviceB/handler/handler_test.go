@@ -1,7 +1,6 @@
 package handler
 
 import (
-	httpErrorMocks "app/internal/test/mocks/http"
 	"bytes"
 	"fmt"
 	"io/ioutil"
@@ -13,7 +12,6 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	httpErr "app/internal/http"
 	errorsAssertion "app/internal/test/assertion/errors"
 	assertion "app/internal/test/assertion/serviceB"
 	serviceMocks "app/internal/test/mocks/serviceB/service"
@@ -46,9 +44,8 @@ var _ = Describe("Handler", func() {
 		ginCtx, router = gin.CreateTestContext(w)
 		serviceMock = serviceMocks.NewService(GinkgoT())
 		deps = &DependenciesNode{
-			Service:   serviceMock,
-			HttpError: httpErr.NewHttpError(),
-			Router:    router,
+			Service: serviceMock,
+			Router:  router,
 		}
 	})
 
@@ -372,9 +369,8 @@ var _ = Describe("Api", func() {
 		_, r = gin.CreateTestContext(httptest.NewRecorder())
 		apiHandler = New(
 			&DependenciesNode{
-				Service:   serviceMocks.NewService(GinkgoT()),
-				HttpError: httpErrorMocks.NewError(GinkgoT()),
-				Router:    r,
+				Service: serviceMocks.NewService(GinkgoT()),
+				Router:  r,
 			},
 		)
 	})
